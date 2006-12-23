@@ -1,0 +1,263 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = quregexmm.cpp; sourceTree = "<group>"; };
+		921A865F0B3CEF9A006DB3E6 /* quregexmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexmm.h; sourceTree = "<group>"; };
+		921A86600B3CEF9A006DB3E6 /* quregexstorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexstorage.h; sourceTree = "<group>"; };
+		92720B0E0A3508A900F44E1A /* libwx_mac-2.6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.6.a"; path = "/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a"; sourceTree = "<absolute>"; };
+		92720B130A3508B500F44E1A /* QuRegExmm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuRegExmm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "QuRegExmm-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		92720B110A3508B500F44E1A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		92720B030A35088600F44E1A = {
+			isa = PBXGroup;
+			children = (
+				921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */,
+				921A865F0B3CEF9A006DB3E6 /* quregexmm.h */,
+				921A86600B3CEF9A006DB3E6 /* quregexstorage.h */,
+				92720B0E0A3508A900F44E1A /* libwx_mac-2.6.a */,
+				92720B140A3508B500F44E1A /* Products */,
+				92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		92720B140A3508B500F44E1A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				92720B130A3508B500F44E1A /* QuRegExmm.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		92720B120A3508B500F44E1A /* QuRegExmm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 92720B170A3508B600F44E1A /* Build configuration list for PBXNativeTarget "QuRegExmm" */;
+			buildPhases = (
+				92720B0F0A3508B500F44E1A /* Resources */,
+				92720B100A3508B500F44E1A /* Sources */,
+				92720B110A3508B500F44E1A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuRegExmm;
+			productName = WXTEMPLATE;
+			productReference = 92720B130A3508B500F44E1A /* QuRegExmm.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		92720B050A35088600F44E1A /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 92720B060A35088600F44E1A /* Build configuration list for PBXProject "QuRegExmm" */;
+			hasScannedForEncodings = 0;
+			mainGroup = 92720B030A35088600F44E1A;
+			productRefGroup = 92720B140A3508B500F44E1A /* Products */;
+			projectDirPath = "";
+			targets = (
+				92720B120A3508B500F44E1A /* QuRegExmm */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		92720B0F0A3508B500F44E1A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		92720B100A3508B500F44E1A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		92720B070A35088600F44E1A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		92720B080A35088600F44E1A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+		92720B180A3508B600F44E1A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				HEADER_SEARCH_PATHS = (
+					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.6",
+					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/include",
+					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/contrib/include",
+				);
+				INFOPLIST_FILE = "QuRegExmm-Info.plist";
+				INSTALL_PATH = "$(USER_APPS_DIR)";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = (
+					"-D__WXMAC__",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-DNO_GCC_PRAGMA",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/Qu/wxMac-release/lib",
+					"-framework",
+					QuickTime,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a",
+					"-framework",
+					WebKit,
+					"-lwxexpat-2.6",
+					"-lwxtiff-2.6",
+					"-lwxjpeg-2.6",
+					"-lwxpng-2.6",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = QuRegExmm;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		92720B190A3508B600F44E1A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				HEADER_SEARCH_PATHS = (
+					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.6",
+					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/include",
+					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/contrib/include",
+				);
+				INFOPLIST_FILE = "QuRegExmm-Info.plist";
+				INSTALL_PATH = "$(USER_APPS_DIR)";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = (
+					"-D__WXMAC__",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-DNO_GCC_PRAGMA",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/Qu/wxMac-release/lib",
+					"-framework",
+					QuickTime,
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a",
+					"-framework",
+					WebKit,
+					"-lwxexpat-2.6",
+					"-lwxtiff-2.6",
+					"-lwxjpeg-2.6",
+					"-lwxpng-2.6",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = QuRegExmm;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		92720B060A35088600F44E1A /* Build configuration list for PBXProject "QuRegExmm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92720B070A35088600F44E1A /* Debug */,
+				92720B080A35088600F44E1A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		92720B170A3508B600F44E1A /* Build configuration list for PBXNativeTarget "QuRegExmm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92720B180A3508B600F44E1A /* Debug */,
+				92720B190A3508B600F44E1A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 92720B050A35088600F44E1A /* Project object */;
+}
