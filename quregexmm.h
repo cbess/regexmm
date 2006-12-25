@@ -9,6 +9,7 @@
  */
 
 class QuRegexStorageDia;
+class wxRegEx;
 
 class 
 QuRegExmmapp : public wxApp
@@ -27,15 +28,19 @@ QuRegExmmFrame : public wxFrame
 		
 	private:
 		void CreateControls();
+		
 		wxTextCtrl *txtRegex, *txtSource;
 		wxCheckBox *chkMatch;
 		QuRegexStorageDia * regexDia;
+		wxRegEx *mRegex;
+		
 		void OnQuit( wxCommandEvent& event );
 		void OnAbout( wxCommandEvent& event );
 		void OnBtMatchClick( wxCommandEvent & evt );
 		void FindMatch();
 		void txtRegex_OnTextChange( wxCommandEvent & evt );
  		void OnRegexStorage( wxCommandEvent & evt );	
+		void txtRegex_KeyDown( wxKeyEvent & evt );
 		
 	private:
 		DECLARE_EVENT_TABLE()
