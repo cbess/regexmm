@@ -5,7 +5,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {951, 4788}}";
 			sepNavSelRange = "{61, 0}";
 			sepNavVisRect = "{{0, 849}, {951, 1070}}";
-			sepNavWindowFrame = "{{485, 56}, {968, 1266}}";
+			sepNavWindowFrame = "{{38, 136}, {996, 1160}}";
 		};
 	};
 	921A865F0B3CEF9A006DB3E6 /* quregexmm.h */ = {
@@ -608,6 +608,16 @@
 		vrLen = 1461;
 		vrLoc = 1089;
 	};
+	922150170B42515100F95C6D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */;
+		name = "quregexmm.cpp: 5";
+		rLen = 0;
+		rLoc = 107;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
 	92720B050A35088600F44E1A /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 92720B150A3508B500F44E1A /* QuRegExmm */;
@@ -753,6 +763,7 @@
 			922150140B42513000F95C6D /* PBXTextBookmark */ = 922150140B42513000F95C6D /* PBXTextBookmark */;
 			922150150B42513000F95C6D /* PBXTextBookmark */ = 922150150B42513000F95C6D /* PBXTextBookmark */;
 			922150160B42513000F95C6D /* PBXTextBookmark */ = 922150160B42513000F95C6D /* PBXTextBookmark */;
+			922150170B42515100F95C6D /* PBXTextBookmark */ = 922150170B42515100F95C6D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 92720B090A35088600F44E1A /* Source Control */;
 		userBuildSettings = {
