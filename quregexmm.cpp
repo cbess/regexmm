@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <wx/intl.h>
-#include <wx/richtext/richtextctrl.h>
+#include "resource.h"
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
 #include <wx/regex.h>
@@ -27,8 +27,9 @@ bool
 QuRegExmmapp::OnInit()
 {	
 	wxXmlResource::Get()->InitAllHandlers();
-
-	wxXmlResource::Get()->Load("QuRegExmmFrame.xrc");
+	InitXmlResource();
+	
+	//wxXmlResource::Get()->Load("QuRegExmmFrame.xrc");
 
 	QuRegExmmFrame *frame = new QuRegExmmFrame;
 	

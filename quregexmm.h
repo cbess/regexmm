@@ -10,7 +10,6 @@
 
 class QuRegexStorageDia;
 class wxRegEx;
-class wxRichTextCtrl;
 
 class 
 QuRegExmmapp : public wxApp

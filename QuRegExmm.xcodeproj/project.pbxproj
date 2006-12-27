@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */; };
+		922150020B4250EF00F95C6D /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922150000B4250EE00F95C6D /* resource.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = quregexmm.cpp; sourceTree = "<group>"; };
 		921A865F0B3CEF9A006DB3E6 /* quregexmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexmm.h; sourceTree = "<group>"; };
 		921A86600B3CEF9A006DB3E6 /* quregexstorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexstorage.h; sourceTree = "<group>"; };
+		922150000B4250EE00F95C6D /* resource.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = resource.cpp; sourceTree = "<group>"; };
+		922150010B4250EE00F95C6D /* resource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
 		92720B0E0A3508A900F44E1A /* libwx_mac-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.8.a"; path = "/Users/Qu/wxMac-release/lib/libwx_mac-2.8.a"; sourceTree = "<absolute>"; };
 		92720B130A3508B500F44E1A /* QuRegExmm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuRegExmm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "QuRegExmm-Info.plist"; sourceTree = "<group>"; };
@@ -33,6 +36,8 @@
 		92720B030A35088600F44E1A = {
 			isa = PBXGroup;
 			children = (
+				922150000B4250EE00F95C6D /* resource.cpp */,
+				922150010B4250EE00F95C6D /* resource.h */,
 				921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */,
 				921A865F0B3CEF9A006DB3E6 /* quregexmm.h */,
 				921A86600B3CEF9A006DB3E6 /* quregexstorage.h */,
@@ -102,6 +107,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */,
+				922150020B4250EF00F95C6D /* resource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
