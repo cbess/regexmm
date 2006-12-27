@@ -29,7 +29,7 @@ QuRegExmmapp::OnInit()
 	wxXmlResource::Get()->InitAllHandlers();
 	InitXmlResource();
 	
-	//wxXmlResource::Get()->Load("QuRegExmmFrame.xrc");
+	// wxXmlResource::Get()->Load("QuRegExmmFrame.xrc");
 
 	QuRegExmmFrame *frame = new QuRegExmmFrame;
 	
