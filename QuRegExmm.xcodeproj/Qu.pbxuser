@@ -618,6 +618,36 @@
 		vrLen = 261;
 		vrLoc = 0;
 	};
+	922150210B42558700F95C6D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */;
+		name = "quregexmm.cpp: 5";
+		rLen = 0;
+		rLoc = 107;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
+	922150220B42558700F95C6D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */;
+		name = "quregexmm.cpp: 5";
+		rLen = 0;
+		rLoc = 107;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
+	922150230B42558700F95C6D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */;
+		name = "quregexmm.cpp: 5";
+		rLen = 0;
+		rLoc = 107;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
 	92720B050A35088600F44E1A /* Project object */ = {
 		activeBuildConfigurationName = Debug;
 		activeExecutable = 92720B150A3508B500F44E1A /* QuRegExmm */;
@@ -764,6 +794,9 @@
 			922150150B42513000F95C6D /* PBXTextBookmark */ = 922150150B42513000F95C6D /* PBXTextBookmark */;
 			922150160B42513000F95C6D /* PBXTextBookmark */ = 922150160B42513000F95C6D /* PBXTextBookmark */;
 			922150170B42515100F95C6D /* PBXTextBookmark */ = 922150170B42515100F95C6D /* PBXTextBookmark */;
+			922150210B42558700F95C6D /* PBXTextBookmark */ = 922150210B42558700F95C6D /* PBXTextBookmark */;
+			922150220B42558700F95C6D /* PBXTextBookmark */ = 922150220B42558700F95C6D /* PBXTextBookmark */;
+			922150230B42558700F95C6D /* PBXTextBookmark */ = 922150230B42558700F95C6D /* PBXTextBookmark */;
 		};
 		sourceControlManager = 92720B090A35088600F44E1A /* Source Control */;
 		userBuildSettings = {
