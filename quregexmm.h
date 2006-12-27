@@ -10,6 +10,7 @@
 
 class QuRegexStorageDia;
 class wxRegEx;
+class wxRichTextCtrl;
 
 class 
 QuRegExmmapp : public wxApp
@@ -29,7 +30,8 @@ QuRegExmmFrame : public wxFrame
 	private:
 		void CreateControls();
 		
-		wxTextCtrl *txtRegex, *txtSource;
+		wxTextCtrl *txtRegex;
+		wxTextCtrl *txtSource;
 		wxCheckBox *chkMatch;
 		QuRegexStorageDia * regexDia;
 		wxRegEx *mRegex;

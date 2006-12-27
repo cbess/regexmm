@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <wx/intl.h>
+#include <wx/richtext/richtextctrl.h>
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
 #include <wx/regex.h>
@@ -125,6 +126,7 @@ QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
 void QuRegExmmFrame::OnBtMatchClick( wxCommandEvent & WXUNUSED(evt) )
 {
 	FindMatch();
+	txtSource->SetFocus();
 } // end
 
 void QuRegExmmFrame::FindMatch()
@@ -138,7 +140,6 @@ void QuRegExmmFrame::FindMatch()
 	wxTextAttr ta;
 	ta.SetFlags(wxTEXT_ATTR_TEXT_COLOUR);
 	ta.SetTextColour(*wxBLUE);
-	txtSource->SetDefaultStyle(ta);
 	
 	// reset the selection
 	txtSource->SetSelection(0,0);
@@ -155,7 +156,7 @@ void QuRegExmmFrame::FindMatch()
 	wxLogNull * logNull = new wxLogNull; // suppress wxRegEx msgs
 
 	// set the style var
-	int regexStyle = wxRE_DEFAULT;
+	int regexStyle = wxRE_DEFAULT | wxRE_ADVANCED | wxRE_NEWLINE;
 
 	// compile the regex object	
 	if ( mRegex->Compile(pattern, regexStyle) )
@@ -167,6 +168,10 @@ void QuRegExmmFrame::FindMatch()
 		{								
 			mRegex->GetMatch(&start, &len, 0);
 						
+			// if using a look around (look ahead/behind assertion)
+			if ( len == 0 )
+				break;
+			
 			long to = start+len;
 			
 			txtSource->SetStyle(start, to, ta);
@@ -181,16 +186,23 @@ void QuRegExmmFrame::FindMatch()
 				if ( num == len ) break;
 			} // end FOR
 			
-			++count;			
+			// increment match count
+			++count;
+			
+			/* - to prevent infinite loops its safe to assume that
+			* there will never be more matches than actual chars available
+			*/
+			if ( count == tmpStrLen )
+				break;						
 		} // end WHILE
 				
 		if ( count > 0 )
-		{
+		{			
 			// set the status text
 			SetStatusText( wxString::Format( 
-					_("%i Match%s found for `%s`"), 
+					_("%i %s found for `%s`"), 
 					 count, 
-					 (count == 1 ? "" : "es"),  
+					 (count == 1 ? _("match") : _("matches")),  
 					 pattern.c_str()) );
 		} // end IF
 		else
@@ -206,7 +218,17 @@ void QuRegExmmFrame::FindMatch()
 		// inform user of the error
 		SetStatusText( _("Check expression.") );
 	} // end ELSE
-		
+	
+#if defined(__WXMAC__)
+	// draw the highlights
+	/*
+	 [Built on wxMac-2.8.0, OS X 10.4]
+	 - does not update style via SetStyle,
+	 unless the text ctrl receives focus
+	 */
+	txtSource->SetFocus();
+	txtRegex->SetFocus();
+#endif
 } // end
 
 void QuRegExmmFrame::txtRegex_OnTextChange( wxCommandEvent& WXUNUSED(evt) )

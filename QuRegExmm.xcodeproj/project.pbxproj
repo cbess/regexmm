@@ -14,7 +14,7 @@
 		921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = quregexmm.cpp; sourceTree = "<group>"; };
 		921A865F0B3CEF9A006DB3E6 /* quregexmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexmm.h; sourceTree = "<group>"; };
 		921A86600B3CEF9A006DB3E6 /* quregexstorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexstorage.h; sourceTree = "<group>"; };
-		92720B0E0A3508A900F44E1A /* libwx_mac-2.6.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.6.a"; path = "/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a"; sourceTree = "<absolute>"; };
+		92720B0E0A3508A900F44E1A /* libwx_mac-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.8.a"; path = "/Users/Qu/wxMac-release/lib/libwx_mac-2.8.a"; sourceTree = "<absolute>"; };
 		92720B130A3508B500F44E1A /* QuRegExmm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuRegExmm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "QuRegExmm-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -36,7 +36,7 @@
 				921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */,
 				921A865F0B3CEF9A006DB3E6 /* quregexmm.h */,
 				921A86600B3CEF9A006DB3E6 /* quregexstorage.h */,
-				92720B0E0A3508A900F44E1A /* libwx_mac-2.6.a */,
+				92720B0E0A3508A900F44E1A /* libwx_mac-2.8.a */,
 				92720B140A3508B500F44E1A /* Products */,
 				92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */,
 			);
@@ -131,9 +131,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
 				HEADER_SEARCH_PATHS = (
-					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.6",
-					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/include",
-					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/contrib/include",
+					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.8",
+					"/Users/Qu/wxMac-2.8.0/include",
+					"/Users/Qu/wxMac-2.8.0/contrib/include",
 				);
 				INFOPLIST_FILE = "QuRegExmm-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
@@ -156,13 +156,14 @@
 					Cocoa,
 					"-framework",
 					System,
-					"/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a",
+					"/Users/Qu/wxMac-release/lib/libwx_mac-2.8.a",
 					"-framework",
 					WebKit,
-					"-lwxexpat-2.6",
-					"-lwxtiff-2.6",
-					"-lwxjpeg-2.6",
-					"-lwxpng-2.6",
+					"-lwxexpat-2.8",
+					"-lwxtiff-2.8",
+					"-lwxjpeg-2.8",
+					"-lwxpng-2.8",
+					"-lwxregex-2.8",
 					"-lz",
 					"-lpthread",
 					"-liconv",
