@@ -87,6 +87,9 @@ void QuRegExmmFrame::CreateControls()
 	txtSubexpression = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("TXT_Subexpression")));
 	udSubexpression = dynamic_cast<wxSpinCtrl*>(FindWindow(XRCID("UD_Subexpression")));
 	
+	// set the default style for subexpression text
+	txtSubexpression->SetDefaultStyle(wxTextAttr(wxColour(wxT("YELLOW")), *wxBLACK));
+	
 	// create initial size
 	wxSize initialSize = wxSize(500, 400);
 	
@@ -230,6 +233,9 @@ void QuRegExmmFrame::FindMatch()
 					 (count == 1 ? _("match") : _("matches")),  
 					 pattern.c_str(),
 					nSubCount) );
+			
+			// set the max value for the spin ctrl
+			udSubexpression->SetRange(0, nSubCount);
 		} // end IF
 		else
 		{
@@ -295,9 +301,13 @@ void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 	// get the subexpression
 	wxString subexpression = mRegex->GetMatch(txtSource->GetValue(), nSelSub);
 	
-	// set the text box value to the value of the corresponding subexpression
-	txtSubexpression->SetValue(subexpression);
+	// clear the previous
+	txtSubexpression->Clear();
 	
-	// select all subexpression text
-	txtSubexpression->SetSelection(-1, -1);
+	// set the text box value to the value of the corresponding subexpression
+	txtSubexpression->AppendText(subexpression);
+	
+	// set focus
+	txtSubexpression->SetFocus();
+	udSubexpression->SetFocus();
 }
