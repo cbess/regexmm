@@ -6,6 +6,7 @@
 #include <wx/regex.h>
 #include <wx/sizer.h>
 #include "quregexstorage.h"
+#include <wx/aboutdlg.h>
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
@@ -15,7 +16,6 @@ BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_MENU( Menu_File_About, QuRegExmmFrame::OnAbout )
 	EVT_BUTTON( XRCID("BT_Match"), QuRegExmmFrame::OnBtMatchClick )
 	EVT_TEXT( XRCID("TXT_Regex"), QuRegExmmFrame::txtRegex_OnTextChange )
-	EVT_BUTTON( XRCID("BT_Quit"), QuRegExmmFrame::OnQuit )
 	EVT_MENU( Menu_File_RegexStorage, QuRegExmmFrame::OnRegexStorage )
 END_EVENT_TABLE()
 
@@ -23,17 +23,16 @@ IMPLEMENT_APP(QuRegExmmapp)
 
 class wxXmlResource;
 
-bool 
-QuRegExmmapp::OnInit()
+bool QuRegExmmapp::OnInit()
 {	
 	wxXmlResource::Get()->InitAllHandlers();
 	InitXmlResource();
 	
-	// wxXmlResource::Get()->Load("QuRegExmmFrame.xrc");
+	// wxXmlResource::Get()->Load("QuRegExmm.xrc");
 
 	QuRegExmmFrame *frame = new QuRegExmmFrame;
 	
-	wxXmlResource::Get()->LoadFrame( frame, NULL, "FRM_Main" );
+	wxXmlResource::Get()->LoadFrame( frame, NULL, wxT("FRM_Main") );
 	
 	frame->InitializeFrame();
 
@@ -60,7 +59,7 @@ void QuRegExmmFrame::InitializeFrame()
 void QuRegExmmFrame::CreateControls()
 {		
 	regexDia = new QuRegexStorageDia;
-	wxXmlResource::Get()->LoadDialog( regexDia, this, "DIA_Regex" );
+	wxXmlResource::Get()->LoadDialog( regexDia, this, wxT("DIA_Regex") );
 	regexDia->InitializeDialog( this );
 	
 	wxMenu *menuFile = new wxMenu;
@@ -84,17 +83,23 @@ void QuRegExmmFrame::CreateControls()
 	txtSource = ((wxTextCtrl*)this->FindWindow(XRCID("TXT_Source")));
 	chkMatch = ((wxCheckBox*)this->FindWindow(XRCID("CHK_Match")));
 	
-	SetSize( this->GetSize().GetWidth(), 350 );
+	// create initial size
+	wxSize initialSize = wxSize(500, 400);
+	
+	// hard code frame size
+	SetSize(initialSize);
+	
+	// set the min size to the current size
+	SetMinSize(initialSize);	
 	
 	// set up the key down events
 	txtRegex->Connect( wxID_ANY,
 					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
 	
-	// create reusable regex object
-	mRegex = new wxRegEx;
-	
-	SetMinSize( this->GetSize() );	
+	// create reusable regex object for FindMatch(...)
+	mRegex = new wxRegEx;	
 
+	// create two status bar fields
 	CreateStatusBar(2);	
 }
 
@@ -111,17 +116,24 @@ void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
 	evt.Skip();
 }
 
-void 
-QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
-{
+void QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
+{ // menu->Quit
 	Close(TRUE);
 }
 
-void 
-QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
-{
-	wxMessageBox( wxT( "QuRegEx Match Maker (Quantum Quinn)" ),
-			wxT( "About "APP_NAME ), wxOK | wxICON_INFORMATION, this );
+void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
+{	
+	// create about dialog box info
+	wxAboutDialogInfo info;
+	info.SetName(_(APP_NAME));
+	info.SetVersion(_("0.2 Beta"));
+	info.SetDescription(_("Free multi-platform regular expression matching application."));
+	info.SetCopyright(_T("(C) 2007 Quantum Quinn"));
+	info.SetWebSite(wxT("QuRegExmm Website"), wxT("http://QuantumQuinn.com"));
+	info.AddDeveloper(wxT("C. Bess of Quantum Quinn"));
+			
+	// show the about info
+	wxAboutBox(info);
 }
 
 void QuRegExmmFrame::OnBtMatchClick( wxCommandEvent & WXUNUSED(evt) )
