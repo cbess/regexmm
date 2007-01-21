@@ -1,0 +1,172 @@
+<?xml version="1.0" ?>
+<resource>
+  <object class="wxFrame" name="FRM_Main">
+    <title>QuRegExmm</title>
+    <centered>1</centered>
+    <size>500,400</size>
+    <object class="wxPanel">
+      <object class="wxBoxSizer">
+        <orient>wxVERTICAL</orient>
+        <object class="sizeritem">
+          <object class="wxStaticBoxSizer">
+            <label>Parse Text</label>
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+              <object class="wxTextCtrl" name="TXT_Source">
+                <pos>7, 37</pos>
+                <style>wxTE_PROCESS_TAB|wxTE_MULTILINE|wxHSCROLL|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxTE_DONTWRAP|wxSUNKEN_BORDER</style>
+                <focused>1</focused>
+              </object>
+              <option>1</option>
+              <flag>wxALL|wxEXPAND</flag>
+              <border>2</border>
+            </object>
+          </object>
+          <option>1</option>
+          <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
+          <border>5</border>
+        </object>
+        <object class="spacer">
+          <size>0,4</size>
+        </object>
+        <object class="sizeritem">
+          <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+              <object class="wxButton" name="BT_Match">
+                <label>&amp;Match</label>
+                <default>1</default>
+                <pos>7, 247</pos>
+                <tooltip>Attempt to match expression.</tooltip>
+              </object>
+              <option>1</option>
+              <flag>wxEXPAND|wxALIGN_CENTRE</flag>
+            </object>
+            <object class="spacer">
+              <size>12,0</size>
+            </object>
+            <object class="sizeritem">
+              <object class="wxCheckBox" name="CHK_Match">
+                <label>&amp;Auto Match</label>
+                <checked>1</checked>
+                <pos>150, 250</pos>
+                <tooltip>Match expression as you type (if checked).</tooltip>
+              </object>
+              <flag>wxALIGN_CENTRE_VERTICAL</flag>
+            </object>
+          </object>
+          <flag>wxALL|wxEXPAND</flag>
+          <border>4</border>
+        </object>
+        <object class="spacer">
+          <size>0,4</size>
+        </object>
+        <object class="sizeritem">
+          <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+              <object class="wxStaticText">
+                <label>&amp;Regex:</label>
+              </object>
+              <flag>wxRIGHT|wxALIGN_CENTRE</flag>
+              <border>4</border>
+            </object>
+            <object class="sizeritem">
+              <object class="wxTextCtrl" name="TXT_Regex">
+                <pos>7, 7</pos>
+              </object>
+              <option>1</option>
+              <flag>wxEXPAND</flag>
+            </object>
+          </object>
+          <flag>wxALL|wxEXPAND</flag>
+          <border>4</border>
+        </object>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="DIA_Regex">
+    <title>QuRegExmm Storage</title>
+    <size>450,300</size>
+    <style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
+          <label>Regular Expression</label>
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="TXT_Regex"/>
+            <option>1</option>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>2</border>
+          </object>
+        </object>
+        <flag>wxTOP|wxEXPAND</flag>
+        <border>5</border>
+      </object>
+      <object class="spacer">
+        <size>0,7</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <object class="sizeritem">
+            <object class="wxButton" name="BT_New">
+              <label>&amp;Add</label>
+              <fg>#0000FF</fg>
+              <tooltip>Add new regex.</tooltip>
+            </object>
+            <flag>wxALIGN_CENTRE|wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="spacer">
+            <size>7,0</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="BT_Save">
+              <label>&amp;Save</label>
+              <default>1</default>
+              <fg>#00AF00</fg>
+              <tooltip>Save regex over selected regex.</tooltip>
+            </object>
+            <option>1</option>
+            <flag>wxEXPAND</flag>
+          </object>
+          <object class="spacer">
+            <size>7,0</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="BT_Delete">
+              <label>&amp;Delete</label>
+              <fg>#FF0000</fg>
+              <tooltip>Delete selected regex.</tooltip>
+            </object>
+            <flag>wxRIGHT|wxSTRETCH_NOT|wxALIGN_RIGHT</flag>
+          </object>
+          <orient>wxHORIZONTAL</orient>
+        </object>
+        <flag>wxALL|wxEXPAND|wxALIGN_CENTRE</flag>
+        <border>2</border>
+      </object>
+      <object class="spacer">
+        <size>0,7</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxListBox" name="LS_Regex">
+          <content/>
+          <style>wxLB_SINGLE|wxLB_NEEDED_SB|wxSUNKEN_BORDER</style>
+        </object>
+        <option>1</option>
+        <flag>wxEXPAND</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxButton" name="BT_Close">
+          <label>&amp;Close</label>
+          <fg>#FF0000</fg>
+          <tooltip>Close</tooltip>
+        </object>
+        <flag>wxTOP|wxBOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <border>5</border>
+      </object>
+    </object>
+  </object>
+</resource>
