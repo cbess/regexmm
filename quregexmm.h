@@ -10,16 +10,16 @@
 
 class QuRegexStorageDia;
 class wxRegEx;
+class wxSpinCtrl;
+class wxSpinEvent;
 
-class 
-QuRegExmmapp : public wxApp
+class QuRegExmmapp : public wxApp
 {
 	public:
 		virtual bool OnInit();
 };
 
-class 
-QuRegExmmFrame : public wxFrame
+class QuRegExmmFrame : public wxFrame
 {	
 	public:
 		QuRegExmmFrame();
@@ -32,6 +32,8 @@ QuRegExmmFrame : public wxFrame
 		wxTextCtrl *txtRegex;
 		wxTextCtrl *txtSource;
 		wxCheckBox *chkMatch;
+		wxSpinCtrl *udSubexpression;
+		wxTextCtrl *txtSubexpression;
 		QuRegexStorageDia * regexDia;
 		wxRegEx *mRegex;
 		
@@ -42,6 +44,7 @@ QuRegExmmFrame : public wxFrame
 		void txtRegex_OnTextChange( wxCommandEvent & evt );
  		void OnRegexStorage( wxCommandEvent & evt );	
 		void txtRegex_KeyDown( wxKeyEvent & evt );
+		void OnSubexpressionChanged( wxSpinEvent& evt );
 		
 	private:
 		DECLARE_EVENT_TABLE()

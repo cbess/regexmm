@@ -7,6 +7,7 @@
 #include <wx/sizer.h>
 #include "quregexstorage.h"
 #include <wx/aboutdlg.h>
+#include <wx/spinctrl.h>
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
@@ -17,6 +18,7 @@ BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_BUTTON( XRCID("BT_Match"), QuRegExmmFrame::OnBtMatchClick )
 	EVT_TEXT( XRCID("TXT_Regex"), QuRegExmmFrame::txtRegex_OnTextChange )
 	EVT_MENU( Menu_File_RegexStorage, QuRegExmmFrame::OnRegexStorage )
+	EVT_SPINCTRL(XRCID("UD_Subexpression"), QuRegExmmFrame::OnSubexpressionChanged)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(QuRegExmmapp)
@@ -79,9 +81,11 @@ void QuRegExmmFrame::CreateControls()
 	
 	menuBar->Enable( Menu_File_AppName, false );
 	
-	txtRegex = ((wxTextCtrl*)this->FindWindow(XRCID("TXT_Regex")));
-	txtSource = ((wxTextCtrl*)this->FindWindow(XRCID("TXT_Source")));
-	chkMatch = ((wxCheckBox*)this->FindWindow(XRCID("CHK_Match")));
+	txtRegex = dynamic_cast<wxTextCtrl*>(this->FindWindow(XRCID("TXT_Regex")));
+	txtSource = dynamic_cast<wxTextCtrl*>(this->FindWindow(XRCID("TXT_Source")));
+	chkMatch = dynamic_cast<wxCheckBox*>(this->FindWindow(XRCID("CHK_Match")));
+	txtSubexpression = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("TXT_Subexpression")));
+	udSubexpression = dynamic_cast<wxSpinCtrl*>(FindWindow(XRCID("UD_Subexpression")));
 	
 	// create initial size
 	wxSize initialSize = wxSize(500, 400);
@@ -151,11 +155,16 @@ void QuRegExmmFrame::FindMatch()
 	// set the default style for the text ctrl
 	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK,*wxWHITE));
 	wxTextAttr ta;
-	ta.SetFlags(wxTEXT_ATTR_TEXT_COLOUR);
+	ta.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR);
 	ta.SetTextColour(*wxBLUE);
+	ta.SetBackgroundColour(wxColour(wxT("YELLOW")));
 	
 	// reset the selection
 	txtSource->SetSelection(0,0);
+	
+	// reset the subexpression ctrls
+	txtSubexpression->Clear();
+	udSubexpression->SetValue(0);
 	
 	size_t start = 0, len = 0;	
 	
@@ -208,20 +217,27 @@ void QuRegExmmFrame::FindMatch()
 			if ( count == tmpStrLen )
 				break;						
 		} // end WHILE
-				
+		
+		// subexpression count
+		int nSubCount = mRegex->GetMatchCount()-1;
+		
 		if ( count > 0 )
 		{			
 			// set the status text
 			SetStatusText( wxString::Format( 
-					_("%i %s found for `%s`"), 
+					_("%i %s found for `%s` (%i)"), 
 					 count, 
 					 (count == 1 ? _("match") : _("matches")),  
-					 pattern.c_str()) );
+					 pattern.c_str(),
+					nSubCount) );
 		} // end IF
 		else
 		{
 			// set status text
-			SetStatusText(wxString::Format(_("No match found for `%s`"), pattern.c_str()));
+			SetStatusText(wxString::Format(
+					_("No match found for `%s` (%i)"),
+			pattern.c_str(), 
+			nSubCount));
 		} // end ELSE
 		
 		delete logNull; // restore msg notification
@@ -229,7 +245,7 @@ void QuRegExmmFrame::FindMatch()
 	else
 	{
 		// inform user of the error
-		SetStatusText( _("Check expression.") );
+		SetStatusText(_("Check expression."));
 	} // end ELSE
 	
 #if defined(__WXMAC__)
@@ -262,3 +278,26 @@ void QuRegExmmFrame::SetRegex( wxString str )
 {
 	txtRegex->SetValue( str );
 } // end
+
+void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
+{
+	// determine if the match has subexpressions
+	int nSubs = mRegex->GetMatchCount()-1;
+	int nSelSub = evt.GetSelection();
+	
+	if ( (nSubs <= 0) || (!mRegex->IsValid()) )
+		return;
+	
+	// prevent out of range
+	if ( nSelSub > nSubs )
+		nSelSub = nSubs;
+	
+	// get the subexpression
+	wxString subexpression = mRegex->GetMatch(txtSource->GetValue(), nSelSub);
+	
+	// set the text box value to the value of the corresponding subexpression
+	txtSubexpression->SetValue(subexpression);
+	
+	// select all subexpression text
+	txtSubexpression->SetSelection(-1, -1);
+}
