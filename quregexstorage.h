@@ -8,8 +8,7 @@
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 
-
-#define DATA "./quregex.dat"
+#define DATA_FILE "quregex.dat"
 
  class QuRegExmmFrame;
  class wxListEvent;
@@ -18,7 +17,7 @@
 {
 	private:
 		wxTextCtrl * txtRegex;
-		wxListCtrl * lsRegex;	
+		wxListBox * lsRegex;	
 		QuRegExmmFrame * par;
 		int prevIdx;
 		
@@ -27,7 +26,7 @@
 		{
 			par = parent;
 			txtRegex = (wxTextCtrl*)FindWindow( XRCID("TXT_Regex") );
-			lsRegex = (wxListCtrl*)FindWindow( XRCID("LS_Regex") );
+			lsRegex = (wxListBox*)FindWindow( XRCID("LS_Regex") );
 			
 			LoadRegexStorage();
 		} // end
@@ -36,35 +35,32 @@
 		
 		void LoadRegexStorage()
 		{
-			if ( wxFile::Exists( DATA ) )
+			if ( wxFile::Exists(wxT(DATA_FILE)) )
 			{
-				wxFileInputStream file( DATA );
+				wxFileInputStream file(wxT(DATA_FILE));
 				wxDataInputStream store( file );
 				
 				int max = store.Read32();
 				
 				for ( int i = 0 ; i < max ; ++i )
-				{
-					wxListItem li;
-					li.SetText( store.ReadString() );
-					
-					lsRegex->InsertItem( li );
+				{					
+					lsRegex->Append(store.ReadString());
 				} // end FOR
 			} // end IF
 		} // end
 		
 		void SaveRegexStorage()
 		{			
-			wxFileOutputStream file( DATA );
+			wxFileOutputStream file(wxT(DATA_FILE));
 			wxDataOutputStream store( file );
 			
-			int max = lsRegex->GetItemCount();
+			int max = lsRegex->GetCount();
 			
 			store.Write32( max );
 			
 			for ( int i = 0 ; i < max ; ++i )
 			{
-				store.WriteString( lsRegex->GetItemText(i) );
+				store.WriteString( lsRegex->GetString(i) );
 			} // end FOR
 			
 			file.Close();			
@@ -85,13 +81,13 @@
 		{			
 			if ( HasText(txtRegex->GetValue()) )
 			{
-				lsRegex->SetItemText( prevIdx, txtRegex->GetValue() );			
+				lsRegex->SetString( prevIdx, txtRegex->GetValue() );			
 				
 				SaveRegexStorage();				
 				
 			} // end IF
 			else
-				wxMessageBox( "Regex field blank." );				
+				wxMessageBox(_("Regex field blank."));				
 		} // end
 		
 		void OnBtNew_Click( wxCommandEvent & WXUNUSED( evt ) )
@@ -99,11 +95,8 @@
 			wxLogNull lg;
 			
 			if ( HasText(txtRegex->GetValue()) )
-			{						
-				wxListItem li;
-				li.SetText( txtRegex->GetValue() );
-				
-				lsRegex->InsertItem( li );			
+			{									
+				lsRegex->Append(txtRegex->GetValue());	
 						
 				ClearText();
 				
@@ -111,15 +104,15 @@
 				
 			} // end IF
 			else
-				wxMessageBox( "Regex field blank." );
+				wxMessageBox(_("Regex field blank."));
 		} // end
 		
 		void OnBtDelete_Click( wxCommandEvent & WXUNUSED( evt ) )
 		{
-			if ( wxMessageBox("Delete regex?", "Delete?",
+			if ( wxMessageBox(_("Delete regex?"), _("Delete?"),
 				 wxYES_NO, this ) == wxYES )
 			{
-				lsRegex->DeleteItem( prevIdx );
+				lsRegex->Delete( prevIdx );
 				ClearText();
 				
 				SaveRegexStorage();
@@ -128,27 +121,40 @@
 		
 		void OnBtClose_Click( wxCommandEvent & WXUNUSED(evt) )
 		{
-			this->Hide();
-			ClearText();
-			
-			SaveRegexStorage();
+			Close();
 		} // end
 		
-		void lsRegex_ItemActivated( wxListEvent & evt )
+		void lsRegex_ItemActivated( wxCommandEvent & evt )
 		{ // lsRegex -> double click [enter]
 			GetRegex();
 		} // end
 		
-		void lsRegex_ItemSelected( wxListEvent & evt )
+		void lsRegex_ItemSelected( wxCommandEvent & evt )
 		{			
-			txtRegex->SetValue( evt.GetText() );
+			txtRegex->SetValue( evt.GetString() );
 			
-			prevIdx = evt.GetIndex();
+			prevIdx = evt.GetSelection();
 		} // end
 		
 		void ClearText()
 		{
-			txtRegex->SetValue( "" );
+			txtRegex->SetValue(wxT(""));
+		}
+		
+		void OnDialogClose( wxCloseEvent & evt )
+		{
+			if ( evt.CanVeto() )
+			{
+				// hide this dialog
+				this->Show(FALSE);
+				
+				ClearText();
+			
+				SaveRegexStorage();
+				
+				// prevent system action
+				evt.Skip();
+			} // end IF
 		}
 		
 	private:
@@ -156,10 +162,11 @@
 }; // end CLASS
 
  BEGIN_EVENT_TABLE( QuRegexStorageDia, wxDialog )
+		 EVT_CLOSE(QuRegexStorageDia::OnDialogClose)
 		 EVT_BUTTON( XRCID("BT_Save"), QuRegexStorageDia::OnBtSave_Click )
 		 EVT_BUTTON( XRCID("BT_New"), QuRegexStorageDia::OnBtNew_Click )
 		 EVT_BUTTON( XRCID("BT_Delete"), QuRegexStorageDia::OnBtDelete_Click )
 		 EVT_BUTTON( XRCID("BT_Close"), QuRegexStorageDia::OnBtClose_Click )
-		 EVT_LIST_ITEM_ACTIVATED( XRCID("LS_Regex"), QuRegexStorageDia::lsRegex_ItemActivated )
-		 EVT_LIST_ITEM_SELECTED( XRCID("LS_Regex"), QuRegexStorageDia::lsRegex_ItemSelected )
+		 EVT_LISTBOX_DCLICK( XRCID("LS_Regex"), QuRegexStorageDia::lsRegex_ItemActivated )
+		 EVT_LISTBOX( XRCID("LS_Regex"), QuRegexStorageDia::lsRegex_ItemSelected )
 END_EVENT_TABLE() 
