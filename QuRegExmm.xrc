@@ -8,79 +8,115 @@
       <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
-          <object class="wxStaticBoxSizer">
-            <label>Parse Text</label>
-            <orient>wxVERTICAL</orient>
-            <object class="sizeritem">
-              <object class="wxTextCtrl" name="TXT_Source">
-                <pos>7, 37</pos>
-                <style>wxTE_PROCESS_TAB|wxTE_MULTILINE|wxHSCROLL|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxTE_DONTWRAP|wxSUNKEN_BORDER</style>
-                <focused>1</focused>
+          <object class="wxSplitterWindow">
+            <object class="wxPanel">
+              <object class="wxStaticBoxSizer">
+                <label>Subexpressions</label>
+                <orient>wxVERTICAL</orient>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="TXT_Subexpression">
+                    <style>wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2</style>
+                  </object>
+                  <option>1</option>
+                  <flag>wxALL|wxEXPAND</flag>
+                  <border>3</border>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxSpinCtrl" name="UD_Subexpression">
+                    <value>0</value>
+                    <min>0</min>
+                    <size>55,-1</size>
+                    <style>wxSP_ARROW_KEYS</style>
+                  </object>
+                  <flag>wxTOP|wxBOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
+                  <border>2</border>
+                </object>
               </object>
-              <option>1</option>
-              <flag>wxALL|wxEXPAND</flag>
-              <border>2</border>
+            </object>
+            <sashpos>1</sashpos>
+            <minsize>1</minsize>
+            <object class="wxPanel">
+              <object class="wxStaticBoxSizer">
+                <label>Parse Text</label>
+                <orient>wxVERTICAL</orient>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="TXT_Source">
+                    <pos>7, 37</pos>
+                    <style>wxTE_PROCESS_TAB|wxTE_MULTILINE|wxHSCROLL|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxTE_DONTWRAP|wxSUNKEN_BORDER</style>
+                    <focused>1</focused>
+                  </object>
+                  <option>1</option>
+                  <flag>wxALL|wxEXPAND</flag>
+                  <border>2</border>
+                </object>
+              </object>
             </object>
           </object>
           <option>1</option>
-          <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
+          <flag>wxALL|wxEXPAND</flag>
           <border>5</border>
         </object>
-        <object class="spacer">
-          <size>0,4</size>
-        </object>
         <object class="sizeritem">
           <object class="wxBoxSizer">
-            <orient>wxHORIZONTAL</orient>
+            <orient>wxVERTICAL</orient>
+            <object class="spacer">
+              <size>0,4</size>
+            </object>
             <object class="sizeritem">
-              <object class="wxButton" name="BT_Match">
-                <label>&amp;Match</label>
-                <default>1</default>
-                <pos>7, 247</pos>
-                <tooltip>Attempt to match expression.</tooltip>
+              <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                  <object class="wxButton" name="BT_Match">
+                    <label>&amp;Match</label>
+                    <default>1</default>
+                    <pos>7, 247</pos>
+                    <tooltip>Attempt to match expression.</tooltip>
+                  </object>
+                  <option>1</option>
+                  <flag>wxEXPAND|wxALIGN_CENTRE</flag>
+                </object>
+                <object class="spacer">
+                  <size>12,0</size>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxCheckBox" name="CHK_Match">
+                    <label>&amp;Auto Match</label>
+                    <checked>1</checked>
+                    <pos>150, 250</pos>
+                    <tooltip>Match expression as you type (if checked).</tooltip>
+                  </object>
+                  <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                </object>
               </object>
-              <option>1</option>
-              <flag>wxEXPAND|wxALIGN_CENTRE</flag>
+              <flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
+              <border>5</border>
             </object>
             <object class="spacer">
-              <size>12,0</size>
+              <size>0,4</size>
             </object>
             <object class="sizeritem">
-              <object class="wxCheckBox" name="CHK_Match">
-                <label>&amp;Auto Match</label>
-                <checked>1</checked>
-                <pos>150, 250</pos>
-                <tooltip>Match expression as you type (if checked).</tooltip>
+              <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                  <object class="wxStaticText">
+                    <label>&amp;Regex:</label>
+                  </object>
+                  <flag>wxRIGHT|wxALIGN_CENTRE</flag>
+                  <border>4</border>
+                </object>
+                <object class="sizeritem">
+                  <object class="wxTextCtrl" name="TXT_Regex">
+                    <pos>7, 7</pos>
+                  </object>
+                  <option>1</option>
+                  <flag>wxEXPAND</flag>
+                </object>
               </object>
-              <flag>wxALIGN_CENTRE_VERTICAL</flag>
-            </object>
-          </object>
-          <flag>wxALL|wxEXPAND</flag>
-          <border>4</border>
-        </object>
-        <object class="spacer">
-          <size>0,4</size>
-        </object>
-        <object class="sizeritem">
-          <object class="wxBoxSizer">
-            <orient>wxHORIZONTAL</orient>
-            <object class="sizeritem">
-              <object class="wxStaticText">
-                <label>&amp;Regex:</label>
-              </object>
-              <flag>wxRIGHT|wxALIGN_CENTRE</flag>
+              <flag>wxALL|wxEXPAND</flag>
               <border>4</border>
             </object>
-            <object class="sizeritem">
-              <object class="wxTextCtrl" name="TXT_Regex">
-                <pos>7, 7</pos>
-              </object>
-              <option>1</option>
-              <flag>wxEXPAND</flag>
-            </object>
           </object>
-          <flag>wxALL|wxEXPAND</flag>
-          <border>4</border>
+          <flag>wxEXPAND|wxALIGN_BOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
         </object>
       </object>
     </object>
