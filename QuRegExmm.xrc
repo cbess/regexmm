@@ -59,6 +59,27 @@
         </object>
         <object class="sizeritem">
           <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+              <object class="wxCheckBox" name="CHK_Multiline">
+                <label>Multi-line</label>
+                <checked>1</checked>
+              </object>
+            </object>
+            <object class="spacer">
+              <size>10,0</size>
+            </object>
+            <object class="sizeritem">
+              <object class="wxCheckBox" name="CHK_IgnoreCase">
+                <label>Ignore Case</label>
+              </object>
+            </object>
+          </object>
+          <flag>wxTOP|wxBOTTOM|wxALIGN_RIGHT</flag>
+          <border>3</border>
+        </object>
+        <object class="sizeritem">
+          <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="spacer">
               <size>0,4</size>
@@ -121,6 +142,7 @@
         </object>
       </object>
     </object>
+    <style>wxDEFAULT_FRAME_STYLE</style>
     <exstyle>wxFRAME_EX_METAL</exstyle>
   </object>
   <object class="wxDialog" name="DIA_Regex">
