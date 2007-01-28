@@ -32,6 +32,8 @@ class QuRegExmmFrame : public wxFrame
 		wxTextCtrl *txtRegex;
 		wxTextCtrl *txtSource;
 		wxCheckBox *chkMatch;
+		wxCheckBox *chkIgnoreCase;
+		wxCheckBox *chkMultiline;
 		wxSpinCtrl *udSubexpression;
 		wxTextCtrl *txtSubexpression;
 		QuRegexStorageDia * regexDia;
@@ -45,6 +47,8 @@ class QuRegExmmFrame : public wxFrame
  		void OnRegexStorage( wxCommandEvent & evt );	
 		void txtRegex_KeyDown( wxKeyEvent & evt );
 		void OnSubexpressionChanged( wxSpinEvent& evt );
+		void OnLoadSession( wxCommandEvent& evt );
+		void OnSaveSession( wxCommandEvent& evt );
 		
 	private:
 		DECLARE_EVENT_TABLE()
@@ -55,7 +59,9 @@ enum
 	Menu_File_Quit = 100,
 	Menu_File_About,
 	Menu_File_AppName,
-	Menu_File_RegexStorage
+	Menu_File_RegexStorage,
+	Menu_Session_SaveSession,
+	Menu_Session_LoadSession
 };
 
 #endif // _QUREGEXMM_H_

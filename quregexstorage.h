@@ -25,8 +25,8 @@
 		void InitializeDialog( QuRegExmmFrame * parent )
 		{
 			par = parent;
-			txtRegex = (wxTextCtrl*)FindWindow( XRCID("TXT_Regex") );
-			lsRegex = (wxListBox*)FindWindow( XRCID("LS_Regex") );
+			txtRegex = XRCCTRL(*this, "TXT_Regex", wxTextCtrl);
+			lsRegex = XRCCTRL(*this, "LS_Regex", wxListBox);
 			
 			LoadRegexStorage();
 		} // end

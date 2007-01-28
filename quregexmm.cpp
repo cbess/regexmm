@@ -19,6 +19,8 @@ BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_TEXT( XRCID("TXT_Regex"), QuRegExmmFrame::txtRegex_OnTextChange )
 	EVT_MENU( Menu_File_RegexStorage, QuRegExmmFrame::OnRegexStorage )
 	EVT_SPINCTRL(XRCID("UD_Subexpression"), QuRegExmmFrame::OnSubexpressionChanged)
+	EVT_MENU(Menu_Session_SaveSession, QuRegExmmFrame::OnSaveSession)
+	EVT_MENU(Menu_Session_LoadSession, QuRegExmmFrame::OnLoadSession)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(QuRegExmmapp)
@@ -74,18 +76,26 @@ void QuRegExmmFrame::CreateControls()
 	menuFile->AppendSeparator();
 	menuFile->Append( Menu_File_Quit, _("E&xit") );
 	
+	wxMenu *sessionMenu = new wxMenu;
+	sessionMenu->Append(Menu_Session_SaveSession, _("Save Session"));
+	sessionMenu->AppendSeparator();
+	sessionMenu->Append(Menu_Session_LoadSession, _("Load Session"));
+	
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append( menuFile, _("&File") );
+	menuBar->Append(sessionMenu, _("&Session"));
 	
 	SetMenuBar( menuBar );
 	
 	menuBar->Enable( Menu_File_AppName, false );
 	
-	txtRegex = dynamic_cast<wxTextCtrl*>(this->FindWindow(XRCID("TXT_Regex")));
-	txtSource = dynamic_cast<wxTextCtrl*>(this->FindWindow(XRCID("TXT_Source")));
-	chkMatch = dynamic_cast<wxCheckBox*>(this->FindWindow(XRCID("CHK_Match")));
-	txtSubexpression = dynamic_cast<wxTextCtrl*>(FindWindow(XRCID("TXT_Subexpression")));
-	udSubexpression = dynamic_cast<wxSpinCtrl*>(FindWindow(XRCID("UD_Subexpression")));
+	txtRegex = XRCCTRL(*this, "TXT_Regex", wxTextCtrl);
+	txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
+	chkMatch = XRCCTRL(*this, "CHK_Match", wxCheckBox);
+	txtSubexpression = XRCCTRL(*this, "TXT_Subexpression", wxTextCtrl);
+	udSubexpression = XRCCTRL(*this, "UD_Subexpression", wxSpinCtrl);
+	chkIgnoreCase = XRCCTRL(*this, "CHK_IgnoreCase", wxCheckBox);
+	chkMultiline = XRCCTRL(*this, "CHK_Multiline", wxCheckBox);
 	
 	// set the default style for subexpression text
 	txtSubexpression->SetDefaultStyle(wxTextAttr(wxColour(wxT("YELLOW")), *wxBLACK));
@@ -154,6 +164,7 @@ void QuRegExmmFrame::FindMatch()
 	// get interactive values
 	wxString pattern( txtRegex->GetValue() );
 	wxString source( txtSource->GetValue() );
+	int regexStyle;
 	
 	// set the default style for the text ctrl
 	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK,*wxWHITE));
@@ -181,8 +192,14 @@ void QuRegExmmFrame::FindMatch()
 	wxLogNull * logNull = new wxLogNull; // suppress wxRegEx msgs
 
 	// set the style var
-	int regexStyle = wxRE_DEFAULT | wxRE_ADVANCED | wxRE_NEWLINE;
+	regexStyle = wxRE_DEFAULT | wxRE_ADVANCED;
 
+	if ( chkIgnoreCase->IsChecked() )
+		regexStyle |= wxRE_ICASE;
+	
+	if ( chkMultiline->IsChecked() )
+		regexStyle |= wxRE_NEWLINE;
+	
 	// compile the regex object	
 	if ( mRegex->Compile(pattern, regexStyle) )
 	{
@@ -310,4 +327,44 @@ void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 	// set focus
 	txtSubexpression->SetFocus();
 	udSubexpression->SetFocus();
+}
+
+void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
+{
+	wxString filePath = wxFileSelector(_("Save session as..."),
+									   wxT(""), wxT(""),
+									   wxT(""),
+									   wxT("QuRegExmm Session files (*.quregex)|*.quregex"),
+									   wxSAVE, this);
+	if ( filePath.empty() )
+		return;
+	
+	wxFileOutputStream file(filePath);
+	wxDataOutputStream store( file );
+			
+	// store the regex
+	store.WriteString(txtRegex->GetValue());
+	
+	// store the source text
+	store.WriteString(txtSource->GetValue());
+	
+	file.Close();	
+}
+
+void QuRegExmmFrame::OnLoadSession( wxCommandEvent & WXUNUSED(evt) )
+{
+	wxString filePath = wxFileSelector(_("Load session from..."));
+	
+	if ( filePath.empty() )
+		return;
+	
+	if ( wxFile::Exists(filePath) )
+	{
+		wxFileInputStream file(filePath);
+		wxDataInputStream store( file );
+				
+		// restore the previous values
+		txtRegex->SetValue(store.ReadString());
+		txtSource->SetValue(store.ReadString());
+	} // end IF
 }
