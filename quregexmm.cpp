@@ -57,6 +57,25 @@ void QuRegExmmFrame::InitializeFrame()
 {	
 	CreateControls();
 	
+	// set the default style for subexpression text
+	txtSubexpression->SetDefaultStyle(wxTextAttr(wxColour(wxT("BLUE")), *wxBLACK));
+	
+	// create initial size
+	wxSize initialSize = wxSize(500, 400);
+	
+	// hard code frame size
+	SetSize(initialSize);
+	
+	// set the min size to the current size
+	SetMinSize(initialSize);	
+	
+	// set up the key down events
+	txtRegex->Connect( wxID_ANY,
+					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
+	
+	// create reusable regex object for FindMatch(...)
+	mRegex = new wxRegEx;	
+		
 	SetStatusText( wxT( STAT_TEXT ), 1 );
 } // end
 
@@ -97,25 +116,6 @@ void QuRegExmmFrame::CreateControls()
 	chkIgnoreCase = XRCCTRL(*this, "CHK_IgnoreCase", wxCheckBox);
 	chkMultiline = XRCCTRL(*this, "CHK_Multiline", wxCheckBox);
 	
-	// set the default style for subexpression text
-	txtSubexpression->SetDefaultStyle(wxTextAttr(wxColour(wxT("YELLOW")), *wxBLACK));
-	
-	// create initial size
-	wxSize initialSize = wxSize(500, 400);
-	
-	// hard code frame size
-	SetSize(initialSize);
-	
-	// set the min size to the current size
-	SetMinSize(initialSize);	
-	
-	// set up the key down events
-	txtRegex->Connect( wxID_ANY,
-					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
-	
-	// create reusable regex object for FindMatch(...)
-	mRegex = new wxRegEx;	
-
 	// create two status bar fields
 	CreateStatusBar(2);	
 }
