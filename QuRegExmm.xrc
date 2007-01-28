@@ -34,8 +34,6 @@
                 </object>
               </object>
             </object>
-            <sashpos>1</sashpos>
-            <minsize>1</minsize>
             <object class="wxPanel">
               <object class="wxStaticBoxSizer">
                 <label>Parse Text</label>
@@ -52,6 +50,8 @@
                 </object>
               </object>
             </object>
+            <sashpos>1</sashpos>
+            <minsize>0</minsize>
           </object>
           <option>1</option>
           <flag>wxALL|wxEXPAND</flag>
@@ -75,7 +75,7 @@
               </object>
             </object>
           </object>
-          <flag>wxTOP|wxBOTTOM|wxALIGN_RIGHT</flag>
+          <flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_RIGHT</flag>
           <border>3</border>
         </object>
         <object class="sizeritem">
@@ -111,7 +111,6 @@
                 </object>
               </object>
               <flag>wxLEFT|wxRIGHT|wxEXPAND</flag>
-              <border>5</border>
             </object>
             <object class="spacer">
               <size>0,4</size>
@@ -135,12 +134,14 @@
                 </object>
               </object>
               <flag>wxALL|wxEXPAND</flag>
-              <border>4</border>
+              <border>5</border>
             </object>
           </object>
-          <flag>wxEXPAND|wxALIGN_BOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
+          <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_BOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
+          <border>5</border>
         </object>
       </object>
+      <style>wxNO_BORDER</style>
     </object>
     <style>wxDEFAULT_FRAME_STYLE</style>
     <exstyle>wxFRAME_EX_METAL</exstyle>
@@ -162,7 +163,7 @@
             <border>2</border>
           </object>
         </object>
-        <flag>wxTOP|wxEXPAND</flag>
+        <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND</flag>
         <border>5</border>
       </object>
       <object class="spacer">
@@ -205,7 +206,7 @@
           <orient>wxHORIZONTAL</orient>
         </object>
         <flag>wxALL|wxEXPAND|wxALIGN_CENTRE</flag>
-        <border>2</border>
+        <border>5</border>
       </object>
       <object class="spacer">
         <size>0,7</size>
@@ -216,7 +217,8 @@
           <style>wxLB_SINGLE|wxLB_NEEDED_SB|wxSUNKEN_BORDER</style>
         </object>
         <option>1</option>
-        <flag>wxEXPAND</flag>
+        <flag>wxALL|wxEXPAND</flag>
+        <border>5</border>
       </object>
       <object class="sizeritem">
         <object class="wxButton" name="BT_Close">
@@ -228,5 +230,6 @@
         <border>5</border>
       </object>
     </object>
+    <exstyle>wxDIALOG_EX_METAL</exstyle>
   </object>
 </resource>
