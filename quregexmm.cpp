@@ -58,7 +58,7 @@ void QuRegExmmFrame::InitializeFrame()
 	CreateControls();
 	
 	// set the default style for subexpression text
-	txtSubexpression->SetDefaultStyle(wxTextAttr(wxColour(wxT("BLUE")), *wxBLACK));
+	txtSubexpression->SetDefaultStyle(wxTextAttr(*wxGREEN, *wxBLACK));
 	
 	// create initial size
 	wxSize initialSize = wxSize(500, 400);
