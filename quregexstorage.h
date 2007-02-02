@@ -124,7 +124,7 @@
 			Close();
 		} // end
 		
-		void lsRegex_ItemActivated( wxCommandEvent & evt )
+		void lsRegex_ItemActivated( wxCommandEvent & WXUNUSED(evt) )
 		{ // lsRegex -> double click [enter]
 			GetRegex();
 		} // end
