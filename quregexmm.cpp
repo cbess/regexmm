@@ -118,6 +118,12 @@ void QuRegExmmFrame::CreateControls()
 	
 	// create two status bar fields
 	CreateStatusBar(2);	
+	
+	// adjust the status bar sizes
+	int widths[2];
+	widths[0] = -1; // (variable width) the left most status area
+	widths[1] = 230; // (fixed width) the right most status area (app title)
+	SetStatusWidths(2, widths);
 }
 
 void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
