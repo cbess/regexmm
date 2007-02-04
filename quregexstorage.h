@@ -66,13 +66,13 @@
 			file.Close();			
 		} // end
 		
-		bool HasText( wxString str )
+		inline bool HasText( wxString str )
 		{
 			wxLogNull lg;
 			return wxRegEx( wxT("[^\\s]") ).Matches( str );
 		}
 				
-		void GetRegex()
+		inline void GetRegex()
 		{
 			par->SetRegex( txtRegex->GetValue() );
 		}
@@ -136,7 +136,7 @@
 			prevIdx = evt.GetSelection();
 		} // end
 		
-		void ClearText()
+		inline void ClearText()
 		{
 			txtRegex->SetValue(wxT(""));
 		}
