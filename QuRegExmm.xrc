@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resource>
   <object class="wxFrame" name="FRM_Main">
     <title>QuRegExmm</title>
@@ -15,7 +15,7 @@
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
                   <object class="wxTextCtrl" name="TXT_Subexpression">
-                    <style>wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL</style>
+                    <style>wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxSIMPLE_BORDER</style>
                   </object>
                   <option>1</option>
                   <flag>wxALL|wxEXPAND</flag>
@@ -41,7 +41,7 @@
                 <object class="sizeritem">
                   <object class="wxTextCtrl" name="TXT_Source">
                     <pos>7, 37</pos>
-                    <style>wxTE_PROCESS_TAB|wxTE_MULTILINE|wxHSCROLL|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxTE_DONTWRAP|wxSUNKEN_BORDER</style>
+                    <style>wxTE_PROCESS_TAB|wxTE_MULTILINE|wxHSCROLL|wxTE_RICH|wxTE_RICH2|wxTE_NOHIDESEL|wxTE_DONTWRAP|wxSIMPLE_BORDER</style>
                     <focused>1</focused>
                   </object>
                   <option>1</option>
@@ -51,7 +51,8 @@
               </object>
             </object>
             <sashpos>1</sashpos>
-            <minsize>0</minsize>
+            <minsize>1</minsize>
+            <style>wxSP_3DSASH|wxSP_NOBORDER</style>
           </object>
           <option>1</option>
           <flag>wxALL|wxEXPAND</flag>
@@ -63,7 +64,6 @@
             <object class="sizeritem">
               <object class="wxCheckBox" name="CHK_Multiline">
                 <label>Multi-line</label>
-                <checked>1</checked>
               </object>
             </object>
             <object class="spacer">
@@ -128,6 +128,15 @@
                 <object class="sizeritem">
                   <object class="wxTextCtrl" name="TXT_Regex">
                     <pos>7, 7</pos>
+                    <font>
+                      <size>12</size>
+                      <family>default</family>
+                      <style>normal</style>
+                      <weight>normal</weight>
+                      <underlined>0</underlined>
+                      <face>Courier 10 Pitch</face>
+                      <encoding>UTF-8</encoding>
+                    </font>
                   </object>
                   <option>1</option>
                   <flag>wxEXPAND</flag>
