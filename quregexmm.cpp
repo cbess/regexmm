@@ -358,9 +358,12 @@ void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
 }
 
 void QuRegExmmFrame::OnLoadSession( wxCommandEvent & WXUNUSED(evt) )
-{
-	wxString filePath = wxFileSelector(_("Load session from..."));
-	
+{	
+	wxString filePath = wxFileSelector(_("Load session from..."),
+									   wxT(""), wxT(""),
+									   wxT(""),
+									   wxT("QuRegExmm Session files (*.quregex)|*.quregex"),
+									   wxOPEN, this);	
 	if ( filePath.empty() )
 		return;
 	
