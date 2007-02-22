@@ -1,9 +1,21 @@
 #include <wx/wx.h>
 #include <wx/intl.h>
 #include "resource.h"
+
+#define wxPCRE_BUILDX
+
+#if defined(wxPCRE_BUILD)
+	#define wxPCRE_ONLY
+	#include <pcre.h>
+	#include "wxPCRE.h"
+	#define REGEX_NAME "(wxPCRE)"
+#else
+	#include <wx/regex.h>
+	#define REGEX_NAME "(wxRegEx)"
+#endif
+
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
-#include <wx/regex.h>
 #include <wx/sizer.h>
 #include "quregexstorage.h"
 #include <wx/aboutdlg.h>
@@ -11,6 +23,7 @@
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
+#define APP_TITLE APP_NAME" "REGEX_NAME
 
 BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_MENU( Menu_File_Quit, QuRegExmmFrame::OnQuit )
@@ -39,7 +52,7 @@ bool QuRegExmmapp::OnInit()
 	wxXmlResource::Get()->LoadFrame( frame, NULL, wxT("FRM_Main") );
 	
 	frame->InitializeFrame();
-
+	frame->SetTitle(wxT(APP_TITLE));
 	frame->Show(TRUE);
 
 	SetTopWindow(frame);
@@ -74,7 +87,11 @@ void QuRegExmmFrame::InitializeFrame()
 					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
 	
 	// create reusable regex object for FindMatch(...)
-	mRegex = new wxRegEx;	
+#if defined(wxPCRE_BUILD)
+	mRegex = new wxPCRE;
+#else
+	mRegex = new wxRegEx;
+#endif	
 		
 	SetStatusText( wxT( STAT_TEXT ), 1 );
 } // end
@@ -139,20 +156,20 @@ void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
 	evt.Skip();
 }
 
-void QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED( event ) )
+void QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 { // menu->Quit
 	Close(TRUE);
 }
 
-void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED( event ) )
+void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {	
 	// create about dialog box info
 	wxAboutDialogInfo info;
-	info.SetName(_(APP_NAME));
-	info.SetVersion(_("0.2 Beta"));
-	info.SetDescription(_("Free multi-platform regular expression matching application."));
+	info.SetName(_(APP_TITLE));
+	info.SetVersion(_("0.4 Beta"));
+	info.SetDescription(_("Free multi-platform regular expression matching application. Supporting wxRegEx and wxPCRE."));
 	info.SetCopyright(_T("(C) 2007 Quantum Quinn"));
-	info.SetWebSite(wxT("QuRegExmm Website"), wxT("http://QuantumQuinn.com"));
+	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Website"));
 	info.AddDeveloper(wxT("C. Bess of Quantum Quinn"));
 			
 	// show the about info
@@ -212,8 +229,9 @@ void QuRegExmmFrame::FindMatch()
 		size_t count = 0;
 		size_t tmpStrLen = source.length(); // length won't change
 		
-		while ( mRegex->Matches(source, regexStyle, tmpStrLen) )
-		{								
+		while ( mRegex->Matches(source, regexStyle) )
+		{					
+			// get the match coords			
 			mRegex->GetMatch(&start, &len, 0);
 						
 			// if using a look around (look ahead/behind assertion)
@@ -222,6 +240,7 @@ void QuRegExmmFrame::FindMatch()
 			
 			long to = start+len;
 			
+			// highlight the match
 			txtSource->SetStyle(start, to, ta);
 			
 			// this prevents it from matching the same thing

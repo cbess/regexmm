@@ -9,9 +9,14 @@
  */
 
 class QuRegexStorageDia;
-class wxRegEx;
 class wxSpinCtrl;
 class wxSpinEvent;
+
+#if defined(wxPCRE_BUILD)
+	class wxPCRE;
+#else
+	class wxRegEx;
+#endif
 
 class QuRegExmmapp : public wxApp
 {
@@ -37,7 +42,12 @@ class QuRegExmmFrame : public wxFrame
 		wxSpinCtrl *udSubexpression;
 		wxTextCtrl *txtSubexpression;
 		QuRegexStorageDia * regexDia;
+		
+#if defined(wxPCRE_BUILD)
+		wxPCRE *mRegex;
+#else
 		wxRegEx *mRegex;
+#endif	
 		
 		void OnQuit( wxCommandEvent& event );
 		void OnAbout( wxCommandEvent& event );
