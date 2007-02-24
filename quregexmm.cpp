@@ -2,17 +2,9 @@
 #include <wx/intl.h>
 #include "resource.h"
 
-#define wxPCRE_BUILDX
-
-#if defined(wxPCRE_BUILD)
-	#define wxPCRE_ONLY
-	#include <pcre.h>
-	#include "wxPCRE.h"
-	#define REGEX_NAME "(wxPCRE)"
-#else
-	#include <wx/regex.h>
-	#define REGEX_NAME "(wxRegEx)"
-#endif
+#include <pcre.h>
+#include "wxPCRE.h"
+#include <wx/regex.h>
 
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
@@ -23,7 +15,6 @@
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
-#define APP_TITLE APP_NAME" "REGEX_NAME
 
 BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_MENU( Menu_File_Quit, QuRegExmmFrame::OnQuit )
@@ -34,6 +25,8 @@ BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_SPINCTRL(XRCID("UD_Subexpression"), QuRegExmmFrame::OnSubexpressionChanged)
 	EVT_MENU(Menu_Session_SaveSession, QuRegExmmFrame::OnSaveSession)
 	EVT_MENU(Menu_Session_LoadSession, QuRegExmmFrame::OnLoadSession)
+	EVT_MENU(Menu_Regex_wxPCRE, QuRegExmmFrame::OnRegexLibSelect)
+	EVT_MENU(Menu_Regex_wxRegEx, QuRegExmmFrame::OnRegexLibSelect)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(QuRegExmmapp)
@@ -52,7 +45,7 @@ bool QuRegExmmapp::OnInit()
 	wxXmlResource::Get()->LoadFrame( frame, NULL, wxT("FRM_Main") );
 	
 	frame->InitializeFrame();
-	frame->SetTitle(wxT(APP_TITLE));
+	frame->SetTitle(wxT(APP_NAME" (wxPCRE)")); // default title
 	frame->Show(TRUE);
 
 	SetTopWindow(frame);
@@ -68,6 +61,8 @@ QuRegExmmFrame::QuRegExmmFrame()
 
 void QuRegExmmFrame::InitializeFrame()
 {	
+	mUsePCRELib = true;
+	
 	CreateControls();
 	
 	// set the default style for subexpression text
@@ -86,12 +81,9 @@ void QuRegExmmFrame::InitializeFrame()
 	txtRegex->Connect( wxID_ANY,
 					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
 	
-	// create reusable regex object for FindMatch(...)
-#if defined(wxPCRE_BUILD)
-	mRegex = new wxPCRE;
-#else
-	mRegex = new wxRegEx;
-#endif	
+	// create reusable regex objects for FindMatch(...)
+	mPCRE = new wxPCRE;
+	mRegEx = new wxRegEx;
 		
 	SetStatusText( wxT( STAT_TEXT ), 1 );
 } // end
@@ -102,28 +94,7 @@ void QuRegExmmFrame::CreateControls()
 	wxXmlResource::Get()->LoadDialog( regexDia, this, wxT("DIA_Regex") );
 	regexDia->InitializeDialog( this );
 	
-	wxMenu *menuFile = new wxMenu;
-	
-	menuFile->Append( Menu_File_AppName, _(STAT_TEXT) );
-	menuFile->AppendSeparator(); // add items below		
-	menuFile->Append( Menu_File_RegexStorage, wxT("&RegExmm Storage") );
-	menuFile->AppendSeparator();
-	menuFile->Append( Menu_File_About, _("&About...") );
-	menuFile->AppendSeparator();
-	menuFile->Append( Menu_File_Quit, _("E&xit") );
-	
-	wxMenu *sessionMenu = new wxMenu;
-	sessionMenu->Append(Menu_Session_SaveSession, _("Save Session"));
-	sessionMenu->AppendSeparator();
-	sessionMenu->Append(Menu_Session_LoadSession, _("Load Session"));
-	
-	wxMenuBar *menuBar = new wxMenuBar;
-	menuBar->Append( menuFile, _("&File") );
-	menuBar->Append(sessionMenu, _("&Session"));
-	
-	SetMenuBar( menuBar );
-	
-	menuBar->Enable( Menu_File_AppName, false );
+	CreateMenuBar();
 	
 	txtRegex = XRCCTRL(*this, "TXT_Regex", wxTextCtrl);
 	txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
@@ -133,6 +104,11 @@ void QuRegExmmFrame::CreateControls()
 	chkIgnoreCase = XRCCTRL(*this, "CHK_IgnoreCase", wxCheckBox);
 	chkMultiline = XRCCTRL(*this, "CHK_Multiline", wxCheckBox);
 	
+	// setup the highlighting text attr
+	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR);
+	mTextAttr.SetTextColour(*wxBLUE);
+	mTextAttr.SetBackgroundColour(wxColour(wxT("YELLOW")));
+	
 	// create two status bar fields
 	CreateStatusBar(2);	
 	
@@ -141,6 +117,38 @@ void QuRegExmmFrame::CreateControls()
 	widths[0] = -1; // (variable width) the left most status area
 	widths[1] = 230; // (fixed width) the right most status area (app title)
 	SetStatusWidths(2, widths);
+}
+
+void QuRegExmmFrame::CreateMenuBar()
+{
+	wxMenu *muFile = new wxMenu;
+	
+	muFile->Append( Menu_File_AppName, _(STAT_TEXT) );
+	muFile->AppendSeparator(); // add items below		
+	muFile->Append( Menu_File_RegexStorage, wxT("&RegExmm Storage"), _("Manage stored regular expressions.") );
+	muFile->AppendSeparator();
+	muFile->Append( Menu_File_About, _("&About..."), _("View "APP_NAME" credits.") );
+	muFile->AppendSeparator();
+	muFile->Append( Menu_File_Quit, _("E&xit") );
+	
+	wxMenu *muRegexLib = new wxMenu;
+	muRegexLib->AppendRadioItem(Menu_Regex_wxPCRE, wxT("wxPCRE"), _("Use the wxPCRE library."));
+	muRegexLib->AppendRadioItem(Menu_Regex_wxRegEx, wxT("wxRegEx"), _("Use the wxRegEx library."));
+	
+	wxMenu *muSession = new wxMenu;
+	muSession->Append(Menu_Session_SaveSession, _("Save Session"), _("Save the current session."));
+	muSession->AppendSeparator();
+	muSession->Append(Menu_Session_LoadSession, _("Load Session"), _("Load a previously saved session."));
+	muSession->AppendSeparator();
+	muSession->AppendSubMenu(muRegexLib, _("RegEx Library"), _("Select the regular expression library."));
+	
+	wxMenuBar *menuBar = new wxMenuBar;
+	menuBar->Append(muFile, _("&File"));
+	menuBar->Append(muSession, _("&Session"));
+	
+	SetMenuBar( menuBar );
+	
+	menuBar->Enable( Menu_File_AppName, false );
 }
 
 void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
@@ -158,6 +166,9 @@ void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
 
 void QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 { // menu->Quit
+	delete mRegEx;
+	delete mPCRE;
+	
 	Close(TRUE);
 }
 
@@ -165,11 +176,11 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {	
 	// create about dialog box info
 	wxAboutDialogInfo info;
-	info.SetName(_(APP_TITLE));
+	info.SetName(wxT(APP_NAME));
 	info.SetVersion(_("0.4 Beta"));
-	info.SetDescription(_("Free multi-platform regular expression matching application. Supporting wxRegEx and wxPCRE."));
-	info.SetCopyright(_T("(C) 2007 Quantum Quinn"));
-	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Website"));
+	info.SetDescription(_("Free multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
+	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
+	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
 	info.AddDeveloper(wxT("C. Bess of Quantum Quinn"));
 			
 	// show the about info
@@ -184,27 +195,23 @@ void QuRegExmmFrame::OnBtMatchClick( wxCommandEvent & WXUNUSED(evt) )
 
 void QuRegExmmFrame::FindMatch()
 {
+	bool useDefaultLib = UsePCRELib();
+		
 	// get interactive values
 	wxString pattern( txtRegex->GetValue() );
 	wxString source( txtSource->GetValue() );
-	int regexStyle;
+	int regexStyle = 0;
 	
 	// set the default style for the text ctrl
 	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK,*wxWHITE));
-	wxTextAttr ta;
-	ta.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR);
-	ta.SetTextColour(*wxBLUE);
-	ta.SetBackgroundColour(wxColour(wxT("YELLOW")));
 	
 	// reset the selection
-	txtSource->SetSelection(0,0);
+	txtSource->SetSelection(0, 0);
 	
 	// reset the subexpression ctrls
 	txtSubexpression->Clear();
 	udSubexpression->SetValue(0);
-	
-	size_t start = 0, len = 0;	
-	
+		
 	// if the required fields are blank
 	if ( pattern.IsEmpty() || source.IsEmpty() )
 	{
@@ -215,57 +222,37 @@ void QuRegExmmFrame::FindMatch()
 	wxLogNull * logNull = new wxLogNull; // suppress wxRegEx msgs
 
 	// set the style var
-	regexStyle = wxRE_DEFAULT | wxRE_ADVANCED;
+	if ( useDefaultLib )
+		regexStyle = wxPCRE_DEFAULT;
+	else
+		regexStyle = wxRE_DEFAULT | wxRE_ADVANCED;
 
 	if ( chkIgnoreCase->IsChecked() )
-		regexStyle |= wxRE_ICASE;
+	{
+		regexStyle |= wxPCRE_ICASE;
+	} // end IF	
 	
 	if ( chkMultiline->IsChecked() )
-		regexStyle |= wxRE_NEWLINE;
-	
-	// compile the regex object	
-	if ( mRegex->Compile(pattern, regexStyle) )
 	{
-		size_t count = 0;
-		size_t tmpStrLen = source.length(); // length won't change
-		
-		while ( mRegex->Matches(source, regexStyle) )
-		{					
-			// get the match coords			
-			mRegex->GetMatch(&start, &len, 0);
-						
-			// if using a look around (look ahead/behind assertion)
-			if ( len == 0 )
-				break;
-			
-			long to = start+len;
-			
-			// highlight the match
-			txtSource->SetStyle(start, to, ta);
-			
-			// this prevents it from matching the same thing
-			for ( size_t index = start, num = 1 ; ; ++index, ++num )
-			{
-				// replace char at index position
-				source.SetChar(index, ' ');
-				
-				// if it has replaced the len of chars from the start index
-				if ( num == len ) break;
-			} // end FOR
-			
-			// increment match count
-			++count;
-			
-			/* - to prevent infinite loops its safe to assume that
-			* there will never be more matches than actual chars available
-			*/
-			if ( count == tmpStrLen )
-				break;						
-		} // end WHILE
-		
-		// subexpression count
-		int nSubCount = mRegex->GetMatchCount()-1;
-		
+		regexStyle |= wxPCRE_NEWLINE;
+	} // end IF
+	
+	bool isValid = false;
+	size_t count = 0;
+	int nSubCount = 0;
+	
+	// perform the regex operation
+	if ( useDefaultLib )
+	{
+		isValid = wxPCRE_Match(pattern, source, regexStyle, &count, &nSubCount);
+	}
+	else
+	{
+		isValid = wxRegEx_Match(pattern, source, regexStyle, &count, &nSubCount);
+	}
+	
+	if ( isValid )
+	{				
 		if ( count > 0 )
 		{			
 			// set the status text
@@ -308,6 +295,101 @@ void QuRegExmmFrame::FindMatch()
 #endif
 } // end
 
+bool QuRegExmmFrame::wxPCRE_Match
+( const wxString& pattern, wxString& source, int flags, size_t * matchCount, int * subCount )
+{
+	if ( !mPCRE->Compile(pattern, flags) )
+		return false;
+	
+	size_t count = 0;
+	size_t tmpStrLen = source.length(); // length won't change
+	int nOffset = 0;
+		
+	while ( mPCRE->RegExMatches(source, 0, nOffset) )
+	{			
+		size_t start = 0, len = 0;	
+		
+		// get the match coords			
+		start = mPCRE->GetMatchStart();
+		len = mPCRE->GetMatchLength();
+					
+		// if using a look around (look ahead/behind assertion)
+		if ( len == 0 )
+			break;
+				
+		// set next mark past this match
+		nOffset = start+len;	
+		
+		// highlight the match
+		txtSource->SetStyle(start, nOffset, mTextAttr);		
+		
+		// increment match count
+		++count;
+		
+		/* - to prevent infinite loops its safe to assume that
+		* there will never be more matches than actual chars available
+		*/
+		if ( count == tmpStrLen )
+			break;						
+	} // end WHILE
+	
+	*subCount = mPCRE->GetMatchCount()-1;
+	*matchCount = count;
+	
+	return true;
+}
+
+bool QuRegExmmFrame::wxRegEx_Match
+( const wxString& pattern, wxString& source, int flags, size_t * matchCount, int * subCount )
+{	
+	if ( !mRegEx->Compile(pattern, flags) )
+		return false;
+	
+	size_t count = 0;
+	size_t tmpStrLen = source.length(); // length won't change
+	
+	while ( mRegEx->Matches(source) )
+	{			
+		size_t start = 0, len = 0;	
+				
+		// get the match coords			
+		mRegEx->GetMatch(&start, &len);
+					
+		// if using a look around (look ahead/behind assertion)
+		if ( len == 0 )
+			break;
+		
+		long to = start+len;
+		
+		// highlight the match
+		txtSource->SetStyle(start, to, mTextAttr);
+		
+		// this prevents it from matching the same thing
+		for ( size_t index = start, num = 1 ; ; ++index, ++num )
+		{
+			// replace char at index position
+			source.SetChar(index, ' ');
+			
+			// if it has replaced the len of chars from the start index
+			if ( num == len ) break;
+		} // end FOR
+		
+		// increment match count
+		++count;
+		
+		/* - to prevent infinite loops its safe to assume that
+		* there will never be more matches than actual chars available
+		*/
+		if ( count == tmpStrLen )
+			break;						
+	} // end WHILE
+	
+	*subCount = mRegEx->GetMatchCount()-1;
+	*matchCount = count;
+	
+	return true;
+}
+
 void QuRegExmmFrame::txtRegex_OnTextChange( wxCommandEvent& WXUNUSED(evt) )
 {
 	if ( chkMatch->IsChecked() )
@@ -324,16 +406,16 @@ void QuRegExmmFrame::OnRegexStorage( wxCommandEvent & WXUNUSED(evt) )
 
 void QuRegExmmFrame::SetRegex( wxString str )
 {
-	txtRegex->SetValue( str );
+	txtRegex->SetValue(str);
 } // end
 
 void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 {
 	// determine if the match has subexpressions
-	int nSubs = mRegex->GetMatchCount()-1;
+	int nSubs = mRegEx->GetMatchCount()-1;
 	int nSelSub = evt.GetSelection();
 	
-	if ( (nSubs <= 0) || (!mRegex->IsValid()) )
+	if ( (nSubs <= 0) || (!mRegEx->IsValid()) )
 		return;
 	
 	// prevent out of range
@@ -341,7 +423,7 @@ void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 		nSelSub = nSubs;
 	
 	// get the subexpression
-	wxString subexpression = mRegex->GetMatch(txtSource->GetValue(), nSelSub);
+	wxString subexpression = mRegEx->GetMatch(txtSource->GetValue(), nSelSub);
 	
 	// clear the previous
 	txtSubexpression->Clear();
@@ -395,4 +477,23 @@ void QuRegExmmFrame::OnLoadSession( wxCommandEvent & WXUNUSED(evt) )
 		txtRegex->SetValue(store.ReadString());
 		txtSource->SetValue(store.ReadString());
 	} // end IF
+}
+
+void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
+{
+	switch ( evt.GetId() )
+	{
+		case Menu_Regex_wxPCRE:
+			this->SetTitle(wxT(APP_NAME" (wxPCRE)"));
+			mUsePCRELib = true;
+			break;
+			
+		case Menu_Regex_wxRegEx:
+			this->SetTitle(wxT(APP_NAME" (wxRegEx)"));
+			mUsePCRELib = false;
+			break;
+	} // end SWITCH
+	
+	// execute the match operation
+	FindMatch();
 }
