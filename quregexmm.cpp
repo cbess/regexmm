@@ -200,26 +200,35 @@ void QuRegExmmFrame::FindMatch()
 	// get interactive values
 	wxString pattern( txtRegex->GetValue() );
 	wxString source( txtSource->GetValue() );
+	wxString statusText;
 	int regexStyle = 0;
+	bool isValid = false;
+	size_t count = 0;
+	int nSubCount = 0;
 	
 	// set the default style for the text ctrl
-	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK,*wxWHITE));
+	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK, *wxWHITE));
 	
 	// reset the selection
 	txtSource->SetSelection(0, 0);
 	
 	// reset the subexpression ctrls
 	txtSubexpression->Clear();
-	udSubexpression->SetValue(0);
-		
-	// if the required fields are blank
-	if ( pattern.IsEmpty() || source.IsEmpty() )
-	{
-		SetStatusText( _("EMPTY") );
-		return;
-	} // end
+	udSubexpression->SetValue(0);		
 	
-	wxLogNull * logNull = new wxLogNull; // suppress wxRegEx msgs
+	// if the required fields are blank
+	if ( pattern.IsEmpty() )
+	{
+		statusText = _("No pattern.");
+		goto end;
+	} 
+	else if ( source.IsEmpty() )
+	{
+		statusText += _("No source.");
+		goto end;
+	} // end IF
+	
+	wxLogNull * logNull = new wxLogNull; // suppress msgs
 
 	// set the style var
 	if ( useDefaultLib )
@@ -227,20 +236,24 @@ void QuRegExmmFrame::FindMatch()
 	else
 		regexStyle = wxRE_DEFAULT | wxRE_ADVANCED;
 
+	// user wants to ignore case
 	if ( chkIgnoreCase->IsChecked() )
 	{
-		regexStyle |= wxPCRE_ICASE;
+		if ( useDefaultLib )
+			regexStyle |= wxPCRE_ICASE;
+		else
+			regexStyle |= wxRE_ICASE;
 	} // end IF	
 	
+	// use wants multi-line pattern
 	if ( chkMultiline->IsChecked() )
 	{
-		regexStyle |= wxPCRE_NEWLINE;
+		if ( useDefaultLib )
+			regexStyle |= wxPCRE_NEWLINE;
+		else
+			regexStyle |= wxRE_NEWLINE;
 	} // end IF
-	
-	bool isValid = false;
-	size_t count = 0;
-	int nSubCount = 0;
-	
+		
 	// perform the regex operation
 	if ( useDefaultLib )
 	{
@@ -251,17 +264,18 @@ void QuRegExmmFrame::FindMatch()
 		isValid = wxRegEx_Match(pattern, source, regexStyle, &count, &nSubCount);
 	}
 	
+	// if the pattern was valid
 	if ( isValid )
 	{				
 		if ( count > 0 )
 		{			
 			// set the status text
-			SetStatusText( wxString::Format( 
-					_("%i %s found for `%s` (%i)"), 
-					 count, 
-					 (count == 1 ? _("match") : _("matches")),  
+			statusText = wxString::Format( 
+					wxT("%i %s found for `%s` (%i)"), 
+					 (int)count, 
+					 (count == 1 ? wxT("match") : wxT("matches")),  
 					 pattern.c_str(),
-					nSubCount) );
+					nSubCount);
 			
 			// set the max value for the spin ctrl
 			udSubexpression->SetRange(0, nSubCount);
@@ -269,19 +283,23 @@ void QuRegExmmFrame::FindMatch()
 		else
 		{
 			// set status text
-			SetStatusText(wxString::Format(
-					_("No match found for `%s` (%i)"),
+			statusText = wxString::Format(
+					wxT("No match found for `%s` (%i)"),
 			pattern.c_str(), 
-			nSubCount));
+			nSubCount);
 		} // end ELSE
 		
 		delete logNull; // restore msg notification
-	} // end IF IsValid
+	} // end IF isValid
 	else
 	{
 		// inform user of the error
-		SetStatusText(_("Check expression."));
+		statusText = _("Check expression.");
 	} // end ELSE
+	
+end:
+	// set the status text
+	SetStatusText(statusText);
 	
 #if defined(__WXMAC__)
 	// draw the highlights
@@ -323,6 +341,10 @@ bool QuRegExmmFrame::wxPCRE_Match
 		// highlight the match
 		txtSource->SetStyle(start, nOffset, mTextAttr);		
 		
+		// store the sub match count
+		if ( count == 0 )
+			*subCount = mPCRE->GetMatchCount()-1;			
+		
 		// increment match count
 		++count;
 		
@@ -333,7 +355,7 @@ bool QuRegExmmFrame::wxPCRE_Match
 			break;						
 	} // end WHILE
 	
-	*subCount = mPCRE->GetMatchCount()-1;
+	// set the matches count
 	*matchCount = count;
 	
 	return true;
@@ -374,6 +396,10 @@ bool QuRegExmmFrame::wxRegEx_Match
 			if ( num == len ) break;
 		} // end FOR
 		
+		// store the valid subexpr count
+		if ( count == 0 )			
+			*subCount = mRegEx->GetMatchCount()-1;
+		
 		// increment match count
 		++count;
 		
@@ -384,7 +410,7 @@ bool QuRegExmmFrame::wxRegEx_Match
 			break;						
 	} // end WHILE
 	
-	*subCount = mRegEx->GetMatchCount()-1;
+	// transfer count value
 	*matchCount = count;
 	
 	return true;
@@ -411,19 +437,31 @@ void QuRegExmmFrame::SetRegex( wxString str )
 
 void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 {
-	// determine if the match has subexpressions
-	int nSubs = mRegEx->GetMatchCount()-1;
-	int nSelSub = evt.GetSelection();
+	// determine the lib
+	bool useDefaultLib = UsePCRELib();
 	
-	if ( (nSubs <= 0) || (!mRegEx->IsValid()) )
+	// determine if the match has subexpressions
+	int nSubs = (useDefaultLib ? mPCRE->GetMatchCount() : mRegEx->GetMatchCount())-1;
+	int nSelSub = evt.GetSelection();
+	bool isValid = (useDefaultLib ? mPCRE->IsValid() : mRegEx->IsValid());
+	
+	if ( (nSubs <= 0) || (!isValid) )
 		return;
+	
+	// store source text
+	wxString source = txtSource->GetValue();
 	
 	// prevent out of range
 	if ( nSelSub > nSubs )
 		nSelSub = nSubs;
 	
 	// get the subexpression
-	wxString subexpression = mRegEx->GetMatch(txtSource->GetValue(), nSelSub);
+	wxString subexpression;
+	
+	if ( useDefaultLib )
+		subexpression = mPCRE->GetMatch(source, nSelSub);
+	else
+		subexpression = mRegEx->GetMatch(source, nSelSub);
 	
 	// clear the previous
 	txtSubexpression->Clear();
