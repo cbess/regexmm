@@ -89,7 +89,7 @@ class QuRegExmmFrame : public wxFrame
 		bool wxPCRE_Match( const wxString& pattern, wxString& source, int flags, size_t * count, int * subCount );
 		bool wxRegEx_Match( const wxString& pattern, wxString& source, int flags, size_t * count, int * subCount );
 		
-		// events
+		// event handlers
 		void OnQuit( wxCommandEvent& event );
 		void OnAbout( wxCommandEvent& event );
 		void OnBtMatchClick( wxCommandEvent & evt );		
