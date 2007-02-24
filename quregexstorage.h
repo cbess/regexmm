@@ -68,13 +68,7 @@
 
 		inline bool HasText( wxString str )
 		{
-			wxLogNull lg;
-
-#if defined(wxPCRE_BUILD)
 			return wxPCRE(wxT("[^\\s]")).Matches(str);
-#else
-			return wxRegEx(wxT("[^\\s]")).Matches(str);
-#endif
 		}
 				
 		inline void GetRegex()
@@ -143,7 +137,7 @@
 		
 		inline void ClearText()
 		{
-			txtRegex->SetValue(wxT(""));
+			txtRegex->SetValue(wxEmptyString);
 		}
 		
 		void OnDialogClose( wxCloseEvent & evt )
