@@ -178,7 +178,7 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 	wxAboutDialogInfo info;
 	info.SetName(wxT(APP_NAME));
 	info.SetVersion(_("0.4 Beta"));
-	info.SetDescription(_("Free multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
+	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
 	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
 	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
 	info.AddDeveloper(wxT("C. Bess of Quantum Quinn"));
@@ -216,6 +216,8 @@ void QuRegExmmFrame::FindMatch()
 	txtSubexpression->Clear();
 	udSubexpression->SetValue(0);		
 	
+	wxLogNull * logNull = new wxLogNull; // suppress msgs
+
 	// if the required fields are blank
 	if ( pattern.IsEmpty() )
 	{
@@ -228,7 +230,6 @@ void QuRegExmmFrame::FindMatch()
 		goto end;
 	} // end IF
 	
-	wxLogNull * logNull = new wxLogNull; // suppress msgs
 
 	// set the style var
 	if ( useDefaultLib )
@@ -289,7 +290,6 @@ void QuRegExmmFrame::FindMatch()
 			nSubCount);
 		} // end ELSE
 		
-		delete logNull; // restore msg notification
 	} // end IF isValid
 	else
 	{
@@ -298,6 +298,9 @@ void QuRegExmmFrame::FindMatch()
 	} // end ELSE
 	
 end:
+
+	delete logNull; // restore msg notification
+
 	// set the status text
 	SetStatusText(statusText);
 	
