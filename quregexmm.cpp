@@ -65,9 +65,6 @@ void QuRegExmmFrame::InitializeFrame()
 	
 	CreateControls();
 	
-	// set the default style for subexpression text
-	txtSubexpression->SetDefaultStyle(wxTextAttr(*wxGREEN, *wxBLACK));
-	
 	// create initial size
 	wxSize initialSize = wxSize(500, 400);
 	
@@ -255,7 +252,7 @@ void QuRegExmmFrame::FindMatch()
 			regexStyle |= wxRE_NEWLINE;
 	} // end IF
 		
-	// perform the regex operation
+	// perform the regex operation (highlight matches)
 	if ( useDefaultLib )
 	{
 		isValid = wxPCRE_Match(pattern, source, regexStyle, &count, &nSubCount);
@@ -280,6 +277,23 @@ void QuRegExmmFrame::FindMatch()
 			
 			// set the max value for the spin ctrl
 			udSubexpression->SetRange(0, nSubCount);
+						
+			if ( nSubCount > 0 )
+			{
+				// restore wxPCRE subexpr
+				mPCRE->Matches(source, regexStyle);
+				
+				wxString subexpr;
+				
+				// set the default subexpr value
+				if ( useDefaultLib )
+					subexpr = mPCRE->GetMatch(source);
+				else
+					subexpr = mRegEx->GetMatch(source);
+				
+				// set the subexpr text value
+				txtSubexpression->SetValue(subexpr);
+			}
 		} // end IF
 		else
 		{
@@ -305,7 +319,6 @@ end:
 	SetStatusText(statusText);
 	
 #if defined(__WXMAC__)
-	// draw the highlights
 	/*
 	 [Built on wxMac-2.8.0, OS X 10.4]
 	 - does not update style via SetStyle,
@@ -325,7 +338,8 @@ bool QuRegExmmFrame::wxPCRE_Match
 	size_t count = 0;
 	size_t tmpStrLen = source.length(); // length won't change
 	int nOffset = 0;
-		
+	
+	// iterate over all possible matches
 	while ( mPCRE->RegExMatches(source, 0, nOffset) )
 	{			
 		size_t start = 0, len = 0;	
@@ -373,6 +387,7 @@ bool QuRegExmmFrame::wxRegEx_Match
 	size_t count = 0;
 	size_t tmpStrLen = source.length(); // length won't change
 	
+	// iterate over all possible matches
 	while ( mRegEx->Matches(source) )
 	{			
 		size_t start = 0, len = 0;	
@@ -466,11 +481,8 @@ void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 	else
 		subexpression = mRegEx->GetMatch(source, nSelSub);
 	
-	// clear the previous
-	txtSubexpression->Clear();
-	
 	// set the text box value to the value of the corresponding subexpression
-	txtSubexpression->AppendText(subexpression);
+	txtSubexpression->SetValue(subexpression);
 	
 	// set focus
 	txtSubexpression->SetFocus();
