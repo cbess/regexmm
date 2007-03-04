@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */; };
 		922150020B4250EF00F95C6D /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922150000B4250EE00F95C6D /* resource.cpp */; };
+		9257A3010B9B76B8002FBD60 /* QuRegExmm.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9257A3000B9B76B8002FBD60 /* QuRegExmm.icns */; };
 		92AA35CD0B8D73B40023D25E /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AA35CC0B8D73B40023D25E /* libpcre.a */; };
 		92AA36080B8E109E0023D25E /* wxPCRE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92AA36060B8E109E0023D25E /* wxPCRE.cpp */; };
 /* End PBXBuildFile section */
@@ -19,6 +20,7 @@
 		921A86600B3CEF9A006DB3E6 /* quregexstorage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexstorage.h; sourceTree = "<group>"; };
 		922150000B4250EE00F95C6D /* resource.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = resource.cpp; sourceTree = "<group>"; };
 		922150010B4250EE00F95C6D /* resource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
+		9257A3000B9B76B8002FBD60 /* QuRegExmm.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = QuRegExmm.icns; sourceTree = "<group>"; };
 		92720B0E0A3508A900F44E1A /* libwx_mac-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.8.a"; path = "/Users/Qu/wxMac-release/lib/libwx_mac-2.8.a"; sourceTree = "<absolute>"; };
 		92720B130A3508B500F44E1A /* QuRegExmm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuRegExmm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "QuRegExmm-Info.plist"; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				92720B130A3508B500F44E1A /* QuRegExmm.app */,
+				9257A3000B9B76B8002FBD60 /* QuRegExmm.icns */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -107,6 +110,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9257A3010B9B76B8002FBD60 /* QuRegExmm.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

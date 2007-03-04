@@ -8,6 +8,8 @@
 	<string>QuRegExmm</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.yourcompany.QuRegExmm</string>
+	<key>CFBundleIconFile</key>
+	<string>QuRegExmm.icns</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
