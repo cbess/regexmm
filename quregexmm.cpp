@@ -59,12 +59,13 @@ bool QuRegExmmapp::OnInit()
 QuRegExmmFrame::QuRegExmmFrame()
 	: wxFrame()
 {
-    // set the frame icon
-	SetIcon(wxICON(appicon));
 } // end
 
 void QuRegExmmFrame::InitializeFrame()
 {	
+    // set the frame icon
+	SetIcon(wxICON(appicon));
+
 	mUsePCRELib = true;
 	
 	CreateControls();
