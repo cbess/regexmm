@@ -16,6 +16,11 @@
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
 
+// the application icon (under Windows and OS/2 it is in resources)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
+	#include "appicon.xpm"
+#endif
+
 BEGIN_EVENT_TABLE( QuRegExmmFrame, wxFrame )
 	EVT_MENU( Menu_File_Quit, QuRegExmmFrame::OnQuit )
 	EVT_MENU( Menu_File_About, QuRegExmmFrame::OnAbout )
@@ -37,8 +42,6 @@ bool QuRegExmmapp::OnInit()
 {	
 	wxXmlResource::Get()->InitAllHandlers();
 	InitXmlResource();
-	
-	// wxXmlResource::Get()->Load("QuRegExmm.xrc");
 
 	QuRegExmmFrame *frame = new QuRegExmmFrame;
 	
@@ -56,7 +59,8 @@ bool QuRegExmmapp::OnInit()
 QuRegExmmFrame::QuRegExmmFrame()
 	: wxFrame()
 {
-	
+    // set the frame icon
+	SetIcon(wxICON(appicon));
 } // end
 
 void QuRegExmmFrame::InitializeFrame()
