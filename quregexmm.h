@@ -5,46 +5,16 @@
 /**
  * @short Application Main Window
  * @author Quantum Quinn <cbess@QuantumQuinn.com>
- * @version 0.1
+ * @version 0.7
  */
-
-enum
-{ // these are only wxRegEx surrogates
-    // use extended regex syntax
-	wxPCRE_EXTENDED = 0, // not implemented
-    
-    // use advanced RE syntax (built-in regex only)
-	wxPCRE_ADVANCED = 0, // not implemented
-
-    // use basic RE syntax
-	wxPCRE_BASIC = 0, // not implemented
-
-    // only check match, don't set back references
-	wxPCRE_NOSUB = 0, // not implemented
-	
-    // default flags
-	wxPCRE_DEFAULT = wxRE_EXTENDED,
-	
-    // ignore case in match
-	wxPCRE_ICASE = PCRE_CASELESS, // compile time only
-
-    // if not set, treat '\n' as an ordinary character, otherwise it is
-    // special: it is not matched by '.' and '^' and '$' always match
-    // after/before it regardless of the setting of wxRE_NOT[BE]OL
-	wxPCRE_NEWLINE = PCRE_MULTILINE, // compile time only
-	
-    // '^' doesn't match at the start of line
-	wxPCRE_NOTBOL = PCRE_NOTBOL, // match time only
-
-    // '$' doesn't match at the end of line
-	wxPCRE_NOTEOL = PCRE_NOTEOL // match time only
-};
 
 class QuRegexStorageDia;
 class wxSpinCtrl;
 class wxSpinEvent;
 class wxPCRE;
 class wxRegEx;
+
+const int PCRE_DEFAULT = 0;
 
 class QuRegExmmapp : public wxApp
 {

@@ -239,7 +239,7 @@ void QuRegExmmFrame::FindMatch()
 
 	// set the style var
 	if ( useDefaultLib )
-		regexStyle = wxPCRE_DEFAULT;
+		regexStyle = PCRE_DEFAULT;
 	else
 		regexStyle = wxRE_DEFAULT | wxRE_ADVANCED;
 
@@ -247,7 +247,7 @@ void QuRegExmmFrame::FindMatch()
 	if ( chkIgnoreCase->IsChecked() )
 	{
 		if ( useDefaultLib )
-			regexStyle |= wxPCRE_ICASE;
+			regexStyle |= PCRE_CASELESS;
 		else
 			regexStyle |= wxRE_ICASE;
 	} // end IF	
@@ -256,7 +256,7 @@ void QuRegExmmFrame::FindMatch()
 	if ( chkMultiline->IsChecked() )
 	{
 		if ( useDefaultLib )
-			regexStyle |= wxPCRE_NEWLINE;
+			regexStyle |= PCRE_MULTILINE;
 		else
 			regexStyle |= wxRE_NEWLINE;
 	} // end IF
