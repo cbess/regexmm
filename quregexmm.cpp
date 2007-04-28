@@ -108,7 +108,11 @@ void QuRegExmmFrame::CreateControls()
 	
 	// setup the highlighting text attr
 	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR);
-	mTextAttr.SetTextColour(*wxBLUE);
+#if defined(__WXMAC__)
+	mTextAttr.SetTextColour(wxColour(20, 200, 20));
+#else
+	mTextAttr.SetTextColour(wxColour(7, 7, 200));
+#endif	
 	mTextAttr.SetBackgroundColour(wxColour(wxT("YELLOW")));
 	
 	// create two status bar fields
@@ -283,7 +287,7 @@ void QuRegExmmFrame::FindMatch()
 			// set the max value for the spin ctrl
 			udSubexpression->SetRange(0, nSubCount);
 						
-			if ( nSubCount > 0 )
+			if ( nSubCount >= 0 )
 			{
 				// restore wxPCRE subexpr
 				mPCRE->Matches(source, regexStyle);
@@ -298,7 +302,7 @@ void QuRegExmmFrame::FindMatch()
 				
 				// set the subexpr text value
 				txtSubexpression->SetValue(subexpr);
-			}
+			} // end IF (nSubCount)
 		} // end IF
 		else
 		{
