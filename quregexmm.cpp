@@ -3,7 +3,7 @@
 #include "resource.h"
 
 #include <pcre.h>
-#include "wxPCRE.h"
+#include "wxpcre.h"
 #include <wx/regex.h>
 
 #include "quregexmm.h"
@@ -48,7 +48,7 @@ bool QuRegExmmapp::OnInit()
 	wxXmlResource::Get()->LoadFrame( frame, NULL, wxT("FRM_Main") );
 	
 	frame->InitializeFrame();
-	frame->SetTitle(wxT(APP_NAME" (wxPCRE)")); // default title
+	frame->SetTitle(wxT(APP_NAME" (PCRE)")); // default title
 	frame->Show(TRUE);
 
 	SetTopWindow(frame);
@@ -134,7 +134,7 @@ void QuRegExmmFrame::CreateMenuBar()
 	muFile->Append( Menu_File_Quit, _("E&xit") );
 	
 	wxMenu *muRegexLib = new wxMenu;
-	muRegexLib->AppendRadioItem(Menu_Regex_wxPCRE, wxT("wxPCRE"), _("Use the wxPCRE library."));
+	muRegexLib->AppendRadioItem(Menu_Regex_wxPCRE, wxT("PCRE"), _("Use the PCRE library."));
 	muRegexLib->AppendRadioItem(Menu_Regex_wxRegEx, wxT("wxRegEx"), _("Use the wxRegEx library."));
 	
 	wxMenu *muSession = new wxMenu;
@@ -179,7 +179,7 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 	// create about dialog box info
 	wxAboutDialogInfo info;
 	info.SetName(wxT(APP_NAME));
-	info.SetVersion(_("0.4 Beta"));
+	info.SetVersion(_("0.7 Beta"));
 	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
 	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
 	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
@@ -497,8 +497,8 @@ void QuRegExmmFrame::OnSubexpressionChanged( wxSpinEvent & evt )
 void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
 {
 	wxString filePath = wxFileSelector(_("Save session as..."),
-									   wxT(""), wxT(""),
-									   wxT(""),
+									   wxEmptyString, wxEmptyString,
+									   wxEmptyString,
 									   wxT("QuRegExmm Session files (*.quregex)|*.quregex"),
 									   wxSAVE, this);
 	if ( filePath.empty() )
@@ -519,8 +519,8 @@ void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
 void QuRegExmmFrame::OnLoadSession( wxCommandEvent & WXUNUSED(evt) )
 {	
 	wxString filePath = wxFileSelector(_("Load session from..."),
-									   wxT(""), wxT(""),
-									   wxT(""),
+									   wxEmptyString, wxEmptyString,
+									   wxEmptyString,
 									   wxT("QuRegExmm Session files (*.quregex)|*.quregex"),
 									   wxOPEN, this);	
 	if ( filePath.empty() )
@@ -542,7 +542,7 @@ void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
 	switch ( evt.GetId() )
 	{
 		case Menu_Regex_wxPCRE:
-			this->SetTitle(wxT(APP_NAME" (wxPCRE)"));
+			this->SetTitle(wxT(APP_NAME" (PCRE)"));
 			mUsePCRELib = true;
 			break;
 			
