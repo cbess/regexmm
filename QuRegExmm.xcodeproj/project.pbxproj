@@ -11,7 +11,7 @@
 		922150020B4250EF00F95C6D /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922150000B4250EE00F95C6D /* resource.cpp */; };
 		9257A3010B9B76B8002FBD60 /* QuRegExmm.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9257A3000B9B76B8002FBD60 /* QuRegExmm.icns */; };
 		92AA35CD0B8D73B40023D25E /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92AA35CC0B8D73B40023D25E /* libpcre.a */; };
-		92AA36080B8E109E0023D25E /* wxPCRE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92AA36060B8E109E0023D25E /* wxPCRE.cpp */; };
+		92AA36080B8E109E0023D25E /* wxpcre.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92AA36060B8E109E0023D25E /* wxpcre.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,8 +26,8 @@
 		92720B160A3508B500F44E1A /* QuRegExmm-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "QuRegExmm-Info.plist"; sourceTree = "<group>"; };
 		92AA35CC0B8D73B40023D25E /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpcre.a; sourceTree = "<group>"; };
 		92AA35D50B8D74070023D25E /* pcre.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pcre.h; sourceTree = "<group>"; };
-		92AA36060B8E109E0023D25E /* wxPCRE.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wxPCRE.cpp; path = ../wxPCRE/wxPCRE.cpp; sourceTree = SOURCE_ROOT; };
-		92AA36070B8E109E0023D25E /* wxPCRE.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wxPCRE.h; path = ../wxPCRE/wxPCRE.h; sourceTree = SOURCE_ROOT; };
+		92AA36060B8E109E0023D25E /* wxpcre.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wxpcre.cpp; path = ../wxPCRE/wxpcre.cpp; sourceTree = SOURCE_ROOT; };
+		92AA36070B8E109E0023D25E /* wxpcre.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wxpcre.h; path = ../wxPCRE/wxpcre.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,8 +45,8 @@
 		92720B030A35088600F44E1A = {
 			isa = PBXGroup;
 			children = (
-				92AA36060B8E109E0023D25E /* wxPCRE.cpp */,
-				92AA36070B8E109E0023D25E /* wxPCRE.h */,
+				92AA36060B8E109E0023D25E /* wxpcre.cpp */,
+				92AA36070B8E109E0023D25E /* wxpcre.h */,
 				92AA35D50B8D74070023D25E /* pcre.h */,
 				92AA35CC0B8D73B40023D25E /* libpcre.a */,
 				922150000B4250EE00F95C6D /* resource.cpp */,
@@ -123,7 +123,7 @@
 			files = (
 				921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */,
 				922150020B4250EF00F95C6D /* resource.cpp in Sources */,
-				92AA36080B8E109E0023D25E /* wxPCRE.cpp in Sources */,
+				92AA36080B8E109E0023D25E /* wxpcre.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
