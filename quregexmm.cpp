@@ -507,6 +507,9 @@ void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
 									   wxSAVE, this);
 	if ( filePath.empty() )
 		return;
+
+	if ( !filePath.EndsWith(wxT(".quregex")) )
+		filePath += wxT(".quregex");
 	
 	wxFileOutputStream file(filePath);
 	wxDataOutputStream store( file );
