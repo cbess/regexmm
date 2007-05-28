@@ -216,15 +216,16 @@
 		92720B190A3508B600F44E1A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
 				HEADER_SEARCH_PATHS = (
-					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.6",
-					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/include",
-					"/Users/Qu/Documents/My_Downloads/wxMac-2.6.3/contrib/include",
+					"/Users/Qu/wxMac-release/lib/wx/include/mac-ansi-release-static-2.8",
+					"/Users/Qu/wxMac-2.8.0/include",
+					"/Users/Qu/wxMac-2.8.0/contrib/include",
 				);
 				INFOPLIST_FILE = "QuRegExmm-Info.plist";
 				INSTALL_PATH = "$(USER_APPS_DIR)";
@@ -247,22 +248,16 @@
 				OTHER_LDFLAGS = (
 					"-L/Users/Qu/wxMac-release/lib",
 					"-framework",
-					QuickTime,
-					"-framework",
 					IOKit,
-					"-framework",
-					Carbon,
 					"-framework",
 					Cocoa,
 					"-framework",
-					System,
-					"/Users/Qu/wxMac-release/lib/libwx_mac-2.6.a",
+					Carbon,
 					"-framework",
-					WebKit,
-					"-lwxexpat-2.6",
-					"-lwxtiff-2.6",
-					"-lwxjpeg-2.6",
-					"-lwxpng-2.6",
+					System,
+					"/Users/Qu/wxMac-release/lib/libwx_mac-2.8.a",
+					"-lwxexpat-2.8",
+					"-lwxregex-2.8",
 					"-lz",
 					"-lpthread",
 					"-liconv",
@@ -270,6 +265,7 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = QuRegExmm;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
