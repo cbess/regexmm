@@ -23,8 +23,16 @@
 #include <wx/file.h>
 #include <wx/wx.h>
 #include <wx/listctrl.h>
+#include <wx/stdpaths.h>
 
 #define DATA_FILE "quregex.dat"
+		
+// determine which path separator to use (based on windows or unix)
+#if defined(__UNIX__)
+#define PATH_SEP "/"
+#elif
+#define PATH_SEP "\"
+#endif
 
  class QuRegExmmFrame;
  class wxListEvent;
@@ -49,11 +57,32 @@
 			
 	private:
 		
+		wxString GetUserDataFilePath()
+		{
+			wxString filename = wxT(DATA_FILE);
+			
+			return GetUserFilePath(filename);
+		}
+				
+		// gets the user's file path based on the OS
+		wxString GetUserFilePath( wxString filename )
+		{			
+		   /* - returns one of the following
+			* Unix: ~ (the home directory)
+			* Windows: C:\Documents and Settings\username\Documents
+			* Mac: ~/Documents 
+			*/		
+			wxString userDir = wxStandardPaths::Get().GetDocumentsDir();
+			
+			// return the formatted file path
+			return wxString::Format(wxT("%s"PATH_SEP"%s"), userDir.c_str(), filename.c_str());
+		}
+		
 		void LoadRegexStorage()
 		{
 			if ( wxFile::Exists(wxT(DATA_FILE)) )
 			{
-				wxFileInputStream file(wxT(DATA_FILE));
+				wxFileInputStream file(GetUserDataFilePath());
 				wxDataInputStream store( file );
 				
 				int max = store.Read32();
@@ -67,7 +96,7 @@
 		
 		void SaveRegexStorage()
 		{			
-			wxFileOutputStream file(wxT(DATA_FILE));
+			wxFileOutputStream file(GetUserDataFilePath());
 			wxDataOutputStream store( file );
 			
 			int max = lsRegex->GetCount();
