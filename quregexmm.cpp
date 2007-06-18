@@ -26,6 +26,7 @@
 #include <pcre.h>
 #include "wxpcre.h"
 #include <wx/regex.h>
+#include <wx/richtext/richtextctrl.h>
 
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
@@ -107,9 +108,24 @@ void QuRegExmmFrame::InitializeFrame()
 	// create reusable regex objects for FindMatch(...)
 	mPCRE = new wxPCRE;
 	mRegEx = new wxRegEx;
-		
+	
+	// set the default color
+	mCurrentHighlightColor = wxColour(200, 250, 250);
+	mCurrentHighlightColorIndex = 1;
+
 	SetStatusText( wxT( STAT_TEXT ), 1 );
 } // end
+
+void QuRegExmmFrame::CreateSourceControl()
+{
+	// instantiate rich text control
+	txtSource = new wxRichTextCtrl(this, XRCID("TXT_Source"), 
+								   wxEmptyString, wxDefaultPosition, 
+								   wxDefaultSize, wxRE_MULTILINE|wxSUNKEN_BORDER);
+	
+	// instantiate the rich text ctrl
+	wxXmlResource::Get()->AttachUnknownControl(wxT("TXT_Source"), txtSource);
+}
 
 void QuRegExmmFrame::CreateControls()
 {		
@@ -120,22 +136,23 @@ void QuRegExmmFrame::CreateControls()
 	CreateMenuBar();
 	
 	txtRegex = XRCCTRL(*this, "TXT_Regex", wxTextCtrl);
-	txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
+	//txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
 	chkMatch = XRCCTRL(*this, "CHK_Match", wxCheckBox);
 	txtSubexpression = XRCCTRL(*this, "TXT_Subexpression", wxTextCtrl);
 	udSubexpression = XRCCTRL(*this, "UD_Subexpression", wxSpinCtrl);
 	chkIgnoreCase = XRCCTRL(*this, "CHK_IgnoreCase", wxCheckBox);
 	chkMultiline = XRCCTRL(*this, "CHK_Multiline", wxCheckBox);
+	this->CreateSourceControl();
+	
+	// set the default text attr
+	mDefaultTextAttr = wxTextAttr(*wxBLACK, *wxWHITE, wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxNORMAL));
 	
 	// setup the highlighting text attr
-	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR);
-#if defined(__WXMAC__)
-	mTextAttr.SetTextColour(wxColour(20, 200, 20));
-#else
-	mTextAttr.SetTextColour(wxColour(7, 7, 200));
-#endif	
-	mTextAttr.SetBackgroundColour(wxColour(wxT("YELLOW")));
-	
+	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
+	mTextAttr.SetTextColour(*wxBLACK);
+	mTextAttr.SetBackgroundColour(mCurrentHighlightColor);
+	mTextAttr.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+			
 	// create two status bar fields
 	CreateStatusBar(2);	
 	
@@ -144,6 +161,9 @@ void QuRegExmmFrame::CreateControls()
 	widths[0] = -1; // (variable width) the left most status area
 	widths[1] = 230; // (fixed width) the right most status area (app title)
 	SetStatusWidths(2, widths);
+	
+	// set focus to source
+	txtSource->SetFocus();
 }
 
 void QuRegExmmFrame::CreateMenuBar()
@@ -193,8 +213,12 @@ void QuRegExmmFrame::txtRegex_KeyDown( wxKeyEvent &evt )
 
 void QuRegExmmFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 { // menu->Quit
-	delete mRegEx;
-	delete mPCRE;
+	
+	if ( mRegEx )
+		delete mRegEx;
+	
+	if ( mPCRE )
+		delete mPCRE;
 	
 	Close(TRUE);
 }
@@ -204,7 +228,7 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 	// create about dialog box info
 	wxAboutDialogInfo info;
 	info.SetName(wxT(APP_NAME));
-	info.SetVersion(_("0.7 Beta"));
+	info.SetVersion(_("0.8 Beta"));
 	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
 	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
 	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
@@ -234,7 +258,7 @@ void QuRegExmmFrame::FindMatch()
 	int nSubCount = 0;
 	
 	// set the default style for the text ctrl
-	txtSource->SetStyle(0, source.Length(), wxTextAttr(*wxBLACK, *wxWHITE));
+	txtSource->SetStyle(0, source.Length(), mDefaultTextAttr);
 	
 	// reset the selection
 	txtSource->SetSelection(0, 0);
@@ -299,7 +323,7 @@ void QuRegExmmFrame::FindMatch()
 		{			
 			// set the status text
 			statusText = wxString::Format( 
-					wxT("%i %s found for `%s` (%i)"), 
+					wxT("%i %s for `%s` (%i)"), 
 					 (int)count, 
 					 (count == 1 ? wxT("match") : wxT("matches")),  
 					 pattern.c_str(),
@@ -329,7 +353,7 @@ void QuRegExmmFrame::FindMatch()
 		{
 			// set status text
 			statusText = wxString::Format(
-					wxT("No match found for `%s` (%i)"),
+					wxT("No match for `%s` (%i)"),
 			pattern.c_str(), 
 			nSubCount);
 		} // end ELSE
@@ -400,6 +424,8 @@ bool QuRegExmmFrame::wxPCRE_Match
 		*/
 		if ( count == tmpStrLen )
 			break;						
+		
+		NextHighlightColor();
 	} // end WHILE
 	
 	// set the matches count
@@ -582,4 +608,38 @@ void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
 	
 	// execute the match operation
 	FindMatch();
+}
+
+void QuRegExmmFrame::NextHighlightColor()
+{	
+	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
+	mTextAttr.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	wxColour color;
+	
+again: // used to start the color choice again
+		
+	switch ( mCurrentHighlightColorIndex )
+	{
+		case 0:
+			color = wxColour(200, 250, 250);
+			break;
+
+		case 1:			
+			color = wxColour(200, 230, 250);
+			break;
+			
+		case 2:
+			color = wxColour(200, 210, 250);
+			break;
+			
+		default:
+			mCurrentHighlightColorIndex = 0;
+			goto again;
+	} // end SWITCH
+	
+	// set the next color value
+	mTextAttr.SetBackgroundColour(color);
+	
+	// increment to next color index
+	++mCurrentHighlightColorIndex;
 }
