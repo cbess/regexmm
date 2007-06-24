@@ -80,9 +80,13 @@
 		
 		void LoadRegexStorage()
 		{
-			if ( wxFile::Exists(wxT(DATA_FILE)) )
+			// get the filpath
+			wxString filePath = GetUserDataFilePath();
+			
+			// does the file exist
+			if ( wxFile::Exists(filePath) )
 			{
-				wxFileInputStream file(GetUserDataFilePath());
+				wxFileInputStream file(filePath);
 				wxDataInputStream store( file );
 				
 				int max = store.Read32();
@@ -101,6 +105,7 @@
 			
 			int max = lsRegex->GetCount();
 			
+			// write the count of regex avail.
 			store.Write32( max );
 			
 			for ( int i = 0 ; i < max ; ++i )
@@ -108,10 +113,11 @@
 				store.WriteString( lsRegex->GetString(i) );
 			} // end FOR
 			
+			// close the file
 			file.Close();			
 		} // end
 
-		inline bool HasText( wxString str )
+		inline bool HasText( const wxString& str )
 		{
 			return wxPCRE(wxT("[^\\s]")).Matches(str);
 		}
