@@ -55,7 +55,7 @@ class QuRegExmmFrame : public wxFrame
 		void CreateControls();
 		void CreateSourceControl(); // setup the rich text control
 		void CreateMenuBar();
-		void NextHighlightColor(); // moves to the next highlighted match color
+		void NextHighlightStyle(); // moves to the next highlighted match color
 				
 		// UI vars
 		wxTextCtrl *txtRegex;

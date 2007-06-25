@@ -37,6 +37,7 @@
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
+#define DEFAULT_FONT_SIZE 12
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
@@ -145,13 +146,13 @@ void QuRegExmmFrame::CreateControls()
 	this->CreateSourceControl();
 	
 	// set the default text attr
-	mDefaultTextAttr = wxTextAttr(*wxBLACK, *wxWHITE, wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxNORMAL));
+	mDefaultTextAttr = wxTextAttr(*wxBLACK, *wxWHITE, wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxNORMAL));
 	
 	// setup the highlighting text attr
 	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
 	mTextAttr.SetTextColour(*wxBLACK);
 	mTextAttr.SetBackgroundColour(mCurrentHighlightColor);
-	mTextAttr.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
 			
 	// create two status bar fields
 	CreateStatusBar(2);	
@@ -371,16 +372,6 @@ end:
 
 	// set the status text
 	SetStatusText(statusText);
-	
-#if defined(__WXMAC__)
-	/*
-	 [Built on wxMac-2.8.0, OS X 10.4]
-	 - does not update style via SetStyle,
-	 unless the text ctrl receives focus
-	 */
-	txtSource->SetFocus();
-	txtRegex->SetFocus();
-#endif
 } // end
 
 bool QuRegExmmFrame::wxPCRE_Match
@@ -425,7 +416,7 @@ bool QuRegExmmFrame::wxPCRE_Match
 		if ( count == tmpStrLen )
 			break;						
 		
-		NextHighlightColor();
+		NextHighlightStyle();
 	} // end WHILE
 	
 	// set the matches count
@@ -481,7 +472,9 @@ bool QuRegExmmFrame::wxRegEx_Match
 		* there will never be more matches than actual chars available
 		*/
 		if ( count == tmpStrLen )
-			break;						
+			break;		
+		
+		NextHighlightStyle();
 	} // end WHILE
 	
 	// transfer count value
@@ -610,10 +603,13 @@ void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
 	FindMatch();
 }
 
-void QuRegExmmFrame::NextHighlightColor()
+#if defined(__WXMAC__)
+
+void QuRegExmmFrame::NextHighlightStyle()
 {	
-	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
-	mTextAttr.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
+	mTextAttr.SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	
 	wxColour color;
 	
 again: // used to start the color choice again
@@ -621,15 +617,15 @@ again: // used to start the color choice again
 	switch ( mCurrentHighlightColorIndex )
 	{
 		case 0:
-			color = wxColour(200, 250, 250);
+			color = *wxBLUE;
 			break;
 
 		case 1:			
-			color = wxColour(200, 230, 250);
+			color = *wxRED;
 			break;
 			
 		case 2:
-			color = wxColour(200, 210, 250);
+			color = wxColour(wxT("GOLD"));
 			break;
 			
 		default:
@@ -638,8 +634,48 @@ again: // used to start the color choice again
 	} // end SWITCH
 	
 	// set the next color value
+	mTextAttr.SetTextColour(color);
+	
+	// increment to next color index
+	++mCurrentHighlightColorIndex;
+}
+
+// else - is other platforms (Win32, Linux)
+#else
+
+void QuRegExmmFrame::NextHighlightStyle()
+{	
+	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
+	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxBOLD));
+	
+	wxColour color;
+	
+again: // used to start the color choice again
+		
+		switch ( mCurrentHighlightColorIndex )
+		{
+			case 0:
+				color = wxColour(200, 250, 250);
+				break;
+				
+			case 1:			
+				color = wxColour(200, 230, 250);
+				break;
+				
+			case 2:
+				color = wxColour(200, 210, 250);
+				break;
+				
+			default:
+				mCurrentHighlightColorIndex = 0;
+				goto again;
+		} // end SWITCH
+	
+	// set the next color value
 	mTextAttr.SetBackgroundColour(color);
 	
 	// increment to next color index
 	++mCurrentHighlightColorIndex;
 }
+
+#endif
