@@ -171,8 +171,10 @@ void QuRegExmmFrame::CreateMenuBar()
 {
 	wxMenu *muFile = new wxMenu;
 	
+#ifndef __WXMAC__
 	muFile->Append( Menu_File_AppName, _(STAT_TEXT) );
 	muFile->AppendSeparator(); // add items below		
+#endif
 	muFile->Append( Menu_File_RegexStorage, wxT("&RegExmm Storage"), _("Manage stored regular expressions.") );
 	muFile->AppendSeparator();
 	muFile->Append( Menu_File_About, _("&About..."), _("View "APP_NAME" credits.") );

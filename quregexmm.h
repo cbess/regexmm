@@ -101,9 +101,9 @@ class QuRegExmmFrame : public wxFrame
 
 enum
 {
-	Menu_File_Quit = 100,
-	Menu_File_About,
-	Menu_File_AppName,
+	Menu_File_About = wxID_ABOUT,
+	Menu_File_Quit = wxID_EXIT,
+	Menu_File_AppName = 100,
 	Menu_File_RegexStorage,
 	Menu_Session_SaveSession,
 	Menu_Session_LoadSession,
