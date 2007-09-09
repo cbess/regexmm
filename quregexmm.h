@@ -53,18 +53,18 @@ class QuRegExmmFrame : public wxFrame
 		
 	private:
 		void CreateControls();
-		void CreateSourceControl(); // setup the rich text control
 		void CreateMenuBar();
 		void NextHighlightStyle(); // moves to the next highlighted match color
 				
 		// UI vars
 		wxTextCtrl *txtRegex;
-		wxRichTextCtrl *txtSource;
+		wxTextCtrl *txtSource;
 		wxCheckBox *chkMatch;
 		wxCheckBox *chkIgnoreCase;
 		wxCheckBox *chkMultiline;
 		wxSpinCtrl *udSubexpression;
 		wxTextCtrl *txtSubexpression;
+		wxSplitterWindow *splMain;
 		QuRegexStorageDia * regexDia;
 		
 		// regular expression lib vars
@@ -75,7 +75,8 @@ class QuRegExmmFrame : public wxFrame
 		bool mUsePCRELib;
 		wxTextAttr mTextAttr;
 		wxTextAttr mDefaultTextAttr;
-		wxColour mCurrentHighlightColor;
+		wxColour mYellowColour;
+		wxColour mBrownColour;
 		int mCurrentHighlightColorIndex;
 		
 		// match methods
