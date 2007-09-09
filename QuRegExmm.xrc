@@ -8,7 +8,7 @@
       <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
-          <object class="wxSplitterWindow">
+          <object class="wxSplitterWindow" name="SPL_Main">
             <object class="wxPanel">
               <object class="wxStaticBoxSizer">
                 <label>Subexpressions</label>
