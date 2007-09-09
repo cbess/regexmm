@@ -49,7 +49,7 @@
                 </object>
               </object>
             </object>
-            <sashpos>1</sashpos>
+            <sashpos>120</sashpos>
             <minsize>1</minsize>
             <style>wxSP_3DSASH|wxSP_NOBORDER</style>
           </object>
@@ -89,7 +89,6 @@
                 <object class="sizeritem">
                   <object class="wxButton" name="BT_Match">
                     <label>&amp;Match</label>
-                    <default>1</default>
                     <pos>7, 247</pos>
                     <tooltip>Attempt to match expression.</tooltip>
                   </object>
