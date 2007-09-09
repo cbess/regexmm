@@ -27,7 +27,7 @@
 #include "wxpcre.h"
 #include <wx/regex.h>
 #include <wx/richtext/richtextctrl.h>
-
+#include <wx/splitter.h>
 #include "quregexmm.h"
 #include <wx/xrc/xmlres.h>
 #include <wx/sizer.h>
@@ -37,7 +37,7 @@
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
-#define DEFAULT_FONT_SIZE 12
+#define DEFAULT_FONT_SIZE 11
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
@@ -94,7 +94,7 @@ void QuRegExmmFrame::InitializeFrame()
 	CreateControls();
 	
 	// create initial size
-	wxSize initialSize = wxSize(500, 400);
+	wxSize initialSize = wxSize(450, 400);
 	
 	// hard code frame size
 	SetSize(initialSize);
@@ -103,30 +103,20 @@ void QuRegExmmFrame::InitializeFrame()
 	SetMinSize(initialSize);	
 	
 	// set up the key down events
-	txtRegex->Connect( wxID_ANY,
+	txtRegex->Connect( txtRegex->GetId(),
 					   wxEVT_KEY_DOWN, wxKeyEventHandler(QuRegExmmFrame::txtRegex_KeyDown), NULL, this );
 	
 	// create reusable regex objects for FindMatch(...)
 	mPCRE = new wxPCRE;
 	mRegEx = new wxRegEx;
 	
-	// set the default color
-	mCurrentHighlightColor = wxColour(200, 250, 250);
+	// set the default color	
+	mYellowColour = wxColour(wxT("YELLOW"));
+	mBrownColour = wxColour(wxT("BROWN"));
 	mCurrentHighlightColorIndex = 1;
 
 	SetStatusText( wxT( STAT_TEXT ), 1 );
 } // end
-
-void QuRegExmmFrame::CreateSourceControl()
-{
-	// instantiate rich text control
-	txtSource = new wxRichTextCtrl(this, XRCID("TXT_Source"), 
-								   wxEmptyString, wxDefaultPosition, 
-								   wxDefaultSize, wxRE_MULTILINE|wxSUNKEN_BORDER);
-	
-	// instantiate the rich text ctrl
-	wxXmlResource::Get()->AttachUnknownControl(wxT("TXT_Source"), txtSource);
-}
 
 void QuRegExmmFrame::CreateControls()
 {		
@@ -137,23 +127,28 @@ void QuRegExmmFrame::CreateControls()
 	CreateMenuBar();
 	
 	txtRegex = XRCCTRL(*this, "TXT_Regex", wxTextCtrl);
-	//txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
+	txtSource = XRCCTRL(*this, "TXT_Source", wxTextCtrl);
 	chkMatch = XRCCTRL(*this, "CHK_Match", wxCheckBox);
 	txtSubexpression = XRCCTRL(*this, "TXT_Subexpression", wxTextCtrl);
 	udSubexpression = XRCCTRL(*this, "UD_Subexpression", wxSpinCtrl);
 	chkIgnoreCase = XRCCTRL(*this, "CHK_IgnoreCase", wxCheckBox);
 	chkMultiline = XRCCTRL(*this, "CHK_Multiline", wxCheckBox);
-	this->CreateSourceControl();
+	splMain = XRCCTRL(*this, "SPL_Main", wxSplitterWindow);
 	
 	// set the default text attr
-	mDefaultTextAttr = wxTextAttr(*wxBLACK, *wxWHITE, wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxNORMAL));
+	mDefaultTextAttr = wxTextAttr(*wxBLACK, *wxWHITE);
+	mDefaultTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
+	mDefaultTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 	
 	// setup the highlighting text attr
 	mTextAttr.SetFlags(wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT);
 	mTextAttr.SetTextColour(*wxBLACK);
-	mTextAttr.SetBackgroundColour(mCurrentHighlightColor);
-	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));	
 			
+#ifndef __WXMAC__
+	splMain->SetSashPosition(95);
+#endif
+
 	// create two status bar fields
 	CreateStatusBar(2);	
 	
@@ -165,6 +160,7 @@ void QuRegExmmFrame::CreateControls()
 	
 	// set focus to source
 	txtSource->SetFocus();
+	txtSource->SetDefaultStyle(mDefaultTextAttr);
 }
 
 void QuRegExmmFrame::CreateMenuBar()
@@ -231,11 +227,11 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 	// create about dialog box info
 	wxAboutDialogInfo info;
 	info.SetName(wxT(APP_NAME));
-	info.SetVersion(_("0.8 Beta"));
+	info.SetVersion(_("0.8.1b"));
 	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
 	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
 	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
-	info.AddDeveloper(wxT("C. Bess of Quantum Quinn"));
+	info.AddDeveloper(wxT("Christopher Bess of Quantum Quinn"));
 			
 	// show the about info
 	wxAboutBox(info);
@@ -277,13 +273,7 @@ void QuRegExmmFrame::FindMatch()
 	{
 		statusText = _("No pattern.");
 		goto end;
-	} 
-	else if ( source.IsEmpty() )
-	{
-		statusText += _("No source.");
-		goto end;
-	} // end IF
-	
+	}
 
 	// set the style var
 	if ( useDefaultLib )
@@ -365,7 +355,10 @@ void QuRegExmmFrame::FindMatch()
 	else
 	{
 		// inform user of the error
-		statusText = _("Check expression.");
+		if (useDefaultLib)
+			statusText = mPCRE->LastError();
+		else
+			statusText = _("Check expression.");
 	} // end ELSE
 	
 end:
@@ -403,7 +396,8 @@ bool QuRegExmmFrame::wxPCRE_Match
 		nOffset = start+len;	
 		
 		// highlight the match
-		txtSource->SetStyle(start, nOffset, mTextAttr);		
+		NextHighlightStyle();
+		txtSource->SetStyle(start, nOffset, mTextAttr);
 		
 		// store the sub match count
 		if ( count == 0 )
@@ -418,7 +412,6 @@ bool QuRegExmmFrame::wxPCRE_Match
 		if ( count == tmpStrLen )
 			break;						
 		
-		NextHighlightStyle();
 	} // end WHILE
 	
 	// set the matches count
@@ -451,6 +444,7 @@ bool QuRegExmmFrame::wxRegEx_Match
 		long to = start+len;
 		
 		// highlight the match
+		NextHighlightStyle();
 		txtSource->SetStyle(start, to, mTextAttr);
 		
 		// this prevents it from matching the same thing
@@ -460,7 +454,8 @@ bool QuRegExmmFrame::wxRegEx_Match
 			source.SetChar(index, ' ');
 			
 			// if it has replaced the len of chars from the start index
-			if ( num == len ) break;
+			if ( num == len ) 
+				break;
 		} // end FOR
 		
 		// store the valid subexpr count
@@ -476,7 +471,6 @@ bool QuRegExmmFrame::wxRegEx_Match
 		if ( count == tmpStrLen )
 			break;		
 		
-		NextHighlightStyle();
 	} // end WHILE
 	
 	// transfer count value
@@ -610,7 +604,7 @@ void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
 void QuRegExmmFrame::NextHighlightStyle()
 {	
 	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
-	mTextAttr.SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, 0, wxBOLD));	
+	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));	
 	
 	wxColour color;
 	
@@ -627,7 +621,7 @@ again: // used to start the color choice again
 			break;
 			
 		case 2:
-			color = wxColour(wxT("GOLD"));
+			color = mGoldColour;
 			break;
 			
 		default:
@@ -647,34 +641,32 @@ again: // used to start the color choice again
 
 void QuRegExmmFrame::NextHighlightStyle()
 {	
-	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
-	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, 0, wxBOLD));
-	
 	wxColour color;
 	
 again: // used to start the color choice again
 		
-		switch ( mCurrentHighlightColorIndex )
-		{
-			case 0:
-				color = wxColour(200, 250, 250);
-				break;
-				
-			case 1:			
-				color = wxColour(200, 230, 250);
-				break;
-				
-			case 2:
-				color = wxColour(200, 210, 250);
-				break;
-				
-			default:
-				mCurrentHighlightColorIndex = 0;
-				goto again;
-		} // end SWITCH
+	switch ( mCurrentHighlightColorIndex )
+	{
+		case 0:
+			color = *wxBLUE;
+			break;
+
+		case 1:			
+			color = *wxRED;
+			break;
+			
+		case 2:
+			color = mBrownColour;
+			break;
+			
+		default:
+			mCurrentHighlightColorIndex = 0;
+			goto again;
+	} // end SWITCH
 	
 	// set the next color value
-	mTextAttr.SetBackgroundColour(color);
+	mTextAttr.SetBackgroundColour(mYellowColour);
+	mTextAttr.SetTextColour(color);
 	
 	// increment to next color index
 	++mCurrentHighlightColorIndex;
