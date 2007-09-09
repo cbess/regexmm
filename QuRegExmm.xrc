@@ -39,8 +39,9 @@
                 <label>Parse Text</label>
                 <orient>wxVERTICAL</orient>
                 <object class="sizeritem">
-                  <object class="unknown" name="TXT_Source">
+                  <object class="wxTextCtrl" name="TXT_Source">
                     <pos>7, 37</pos>
+                    <style>wxTE_AUTO_SCROLL|wxTE_PROCESS_TAB|wxTE_MULTILINE|wxTE_RICH|wxTE_RICH2|wxTE_DONTWRAP</style>
                     <focused>1</focused>
                   </object>
                   <option>1</option>
