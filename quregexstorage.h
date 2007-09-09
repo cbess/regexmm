@@ -30,8 +30,8 @@
 // determine which path separator to use (based on windows or unix)
 #if defined(__UNIX__)
 #define PATH_SEP "/"
-#elif
-#define PATH_SEP "\"
+#else
+#define PATH_SEP "\\"
 #endif
 
  class QuRegExmmFrame;
