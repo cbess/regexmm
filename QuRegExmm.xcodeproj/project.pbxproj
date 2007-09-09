@@ -7,16 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92047D400BFFB54E00A6185C /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92047D3F0BFFB54E00A6185C /* libpcre.a */; };
 		92047D690BFFCB8C00A6185C /* libwx_mac-2.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92047D680BFFCB8C00A6185C /* libwx_mac-2.8.a */; };
 		921A86610B3CEF9A006DB3E6 /* quregexmm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */; };
 		922150020B4250EF00F95C6D /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922150000B4250EE00F95C6D /* resource.cpp */; };
 		9257A3010B9B76B8002FBD60 /* QuRegExmm.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9257A3000B9B76B8002FBD60 /* QuRegExmm.icns */; };
 		92AA36080B8E109E0023D25E /* wxpcre.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92AA36060B8E109E0023D25E /* wxpcre.cpp */; };
+		92E800B50C8C9C7E00A7040D /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E800B40C8C9C7E00A7040D /* libpcre.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		92047D3F0BFFB54E00A6185C /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpcre.a; sourceTree = "<group>"; };
 		92047D680BFFCB8C00A6185C /* libwx_mac-2.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwx_mac-2.8.a"; path = "../../../../wxMac-release/lib/libwx_mac-2.8.a"; sourceTree = SOURCE_ROOT; };
 		921A865E0B3CEF9A006DB3E6 /* quregexmm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = quregexmm.cpp; sourceTree = "<group>"; };
 		921A865F0B3CEF9A006DB3E6 /* quregexmm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = quregexmm.h; sourceTree = "<group>"; };
@@ -29,6 +28,7 @@
 		92AA35D50B8D74070023D25E /* pcre.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pcre.h; sourceTree = "<group>"; };
 		92AA36060B8E109E0023D25E /* wxpcre.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wxpcre.cpp; path = ../wxPCRE/wxpcre.cpp; sourceTree = SOURCE_ROOT; };
 		92AA36070B8E109E0023D25E /* wxpcre.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wxpcre.h; path = ../wxPCRE/wxpcre.h; sourceTree = SOURCE_ROOT; };
+		92E800B40C8C9C7E00A7040D /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpcre.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,8 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92047D400BFFB54E00A6185C /* libpcre.a in Frameworks */,
 				92047D690BFFCB8C00A6185C /* libwx_mac-2.8.a in Frameworks */,
+				92E800B50C8C9C7E00A7040D /* libpcre.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,8 +47,8 @@
 		92720B030A35088600F44E1A = {
 			isa = PBXGroup;
 			children = (
+				92E800B40C8C9C7E00A7040D /* libpcre.a */,
 				92047D680BFFCB8C00A6185C /* libwx_mac-2.8.a */,
-				92047D3F0BFFB54E00A6185C /* libpcre.a */,
 				92AA36060B8E109E0023D25E /* wxpcre.cpp */,
 				92AA36070B8E109E0023D25E /* wxpcre.h */,
 				92AA35D50B8D74070023D25E /* pcre.h */,
@@ -166,10 +166,12 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_4)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../../../../wxMac-release/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)\"";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-D__WXMAC__",
@@ -234,10 +236,12 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_4)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../../../../wxMac-release/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)\"";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-D__WXMAC__",

@@ -77,6 +77,7 @@ class QuRegExmmFrame : public wxFrame
 		wxTextAttr mDefaultTextAttr;
 		wxColour mYellowColour;
 		wxColour mBrownColour;
+		wxColour mGoldColour; // not used on win32
 		int mCurrentHighlightColorIndex;
 		
 		// match methods

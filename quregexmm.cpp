@@ -37,7 +37,11 @@
 
 #define APP_NAME "QuRegExmm"
 #define STAT_TEXT APP_NAME" :: Quantum Quinn"
+#ifdef __WXMAC__
+#define DEFAULT_FONT_SIZE 13
+#else
 #define DEFAULT_FONT_SIZE 11
+#endif
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
@@ -113,9 +117,10 @@ void QuRegExmmFrame::InitializeFrame()
 	// set the default color	
 	mYellowColour = wxColour(wxT("YELLOW"));
 	mBrownColour = wxColour(wxT("BROWN"));
+	mGoldColour = wxColour(wxT("GOLD"));
 	mCurrentHighlightColorIndex = 1;
 
-	SetStatusText( wxT( STAT_TEXT ), 1 );
+	SetStatusText(wxT(STAT_TEXT), 1);
 } // end
 
 void QuRegExmmFrame::CreateControls()
@@ -367,6 +372,16 @@ end:
 
 	// set the status text
 	SetStatusText(statusText);
+	
+#ifdef __WXMAC__
+	/*
+	 [Built on wxMac-2.8.0, OS X 10.4]
+	 - does not update style via SetStyle,
+	 unless the wxTextCtrl receives focus
+	 */
+	txtSource->SetFocus();
+	txtRegex->SetFocus();
+#endif
 } // end
 
 bool QuRegExmmFrame::wxPCRE_Match
@@ -602,10 +617,7 @@ void QuRegExmmFrame::OnRegexLibSelect( wxCommandEvent& evt )
 #if defined(__WXMAC__)
 
 void QuRegExmmFrame::NextHighlightStyle()
-{	
-	mTextAttr.SetFlags(wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_FONT_WEIGHT|wxTEXT_ATTR_TEXT_COLOUR);
-	mTextAttr.SetFont(wxFont(DEFAULT_FONT_SIZE, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));	
-	
+{		
 	wxColour color;
 	
 again: // used to start the color choice again
