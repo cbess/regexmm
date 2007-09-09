@@ -49,7 +49,7 @@
                 </object>
               </object>
             </object>
-            <sashpos>120</sashpos>
+            <sashpos>110</sashpos>
             <minsize>1</minsize>
             <style>wxSP_3DSASH|wxSP_NOBORDER</style>
           </object>
