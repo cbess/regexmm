@@ -42,6 +42,8 @@
 #else
 #define DEFAULT_FONT_SIZE 11
 #endif
+#define DATA_VERSION 2
+#define DATA_VERSION_PREFIX "quregex-data-version="
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
@@ -72,7 +74,7 @@ bool QuRegExmmapp::OnInit()
 
 	QuRegExmmFrame *frame = new QuRegExmmFrame;
 	
-	wxXmlResource::Get()->LoadFrame( frame, NULL, wxT("FRM_Main") );
+	wxXmlResource::Get()->LoadFrame(frame, NULL, wxT("FRM_Main"));
 	
 	frame->InitializeFrame();
 	frame->SetTitle(wxT(APP_NAME" (PCRE)")); // default title
@@ -117,7 +119,7 @@ void QuRegExmmFrame::InitializeFrame()
 	// set the default color	
 	mYellowColour = wxColour(wxT("YELLOW"));
 	mBrownColour = wxColour(wxT("BROWN"));
-	mGoldColour = wxColour(wxT("GOLD"));
+	mGoldColour = wxColour(wxT("GOLD")); // used by mac
 	mCurrentHighlightColorIndex = 1;
 
 	SetStatusText(wxT(STAT_TEXT), 1);
@@ -176,7 +178,7 @@ void QuRegExmmFrame::CreateMenuBar()
 	muFile->Append( Menu_File_AppName, _(STAT_TEXT) );
 	muFile->AppendSeparator(); // add items below		
 #endif
-	muFile->Append( Menu_File_RegexStorage, wxT("&RegExmm Storage"), _("Manage stored regular expressions.") );
+	muFile->Append( Menu_File_RegexStorage, wxT("&RegEx Storage"), _("Manage stored regular expressions.") );
 	muFile->AppendSeparator();
 	muFile->Append( Menu_File_About, _("&About..."), _("View "APP_NAME" credits.") );
 	muFile->AppendSeparator();
@@ -564,7 +566,16 @@ void QuRegExmmFrame::OnSaveSession( wxCommandEvent & WXUNUSED(evt) )
 	
 	wxFileOutputStream file(filePath);
 	wxDataOutputStream store( file );
-			
+	wxString verString; // the data version
+	verString << DATA_VERSION_PREFIX << DATA_VERSION;
+
+	/** 9/9/2007
+	 * - I'm using a string instead of a numerical store, because
+	 * I forgot to add versioning earlier (backwards compatibility workaround)
+	 */
+	// write the data version
+	store.WriteString(verString);
+
 	// store the regex
 	store.WriteString(txtRegex->GetValue());
 	
@@ -588,10 +599,39 @@ void QuRegExmmFrame::OnLoadSession( wxCommandEvent & WXUNUSED(evt) )
 	{
 		wxFileInputStream file(filePath);
 		wxDataInputStream store( file );
-				
-		// restore the previous values
-		txtRegex->SetValue(store.ReadString());
-		txtSource->SetValue(store.ReadString());
+		wxString firstString;
+		wxString verString;
+		long ver = 1;
+
+		// read the data version
+		firstString = store.ReadString();
+
+		if (firstString.StartsWith(wxT(DATA_VERSION_PREFIX), &verString))
+		{
+			verString.ToLong(&ver);
+		}
+
+		// load specific data version
+		if (ver == 1)
+		{
+			// restore the previous values
+			txtRegex->SetValue(firstString);
+			txtSource->SetValue(store.ReadString());
+		}
+		
+		if (ver >= 2)
+		{
+			txtRegex->SetValue(store.ReadString());
+			txtSource->SetValue(store.ReadString());
+		}
+
+		if (ver >= 3)
+		{
+			// future use
+		}
+
+		// execute the match making
+		this->FindMatch();
 	} // end IF
 }
 
