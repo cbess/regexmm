@@ -234,10 +234,10 @@ void QuRegExmmFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 	// create about dialog box info
 	wxAboutDialogInfo info;
 	info.SetName(wxT(APP_NAME));
-	info.SetVersion(_("0.8.1b"));
-	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both wxPCRE and wxRegEx."));
+	info.SetVersion(_("0.7.1b"));
+	info.SetDescription(_("Open source multi-platform regular expression matching application. Supports both PCRE and wxRegEx."));
 	info.SetCopyright(wxT("(C) 2007 Quantum Quinn"));
-	info.SetWebSite(wxT("http://QuantumQuinn.com"), wxT("QuRegExmm Homepage"));
+	info.SetWebSite(wxT("http://quregexmm.sf.net"), wxT("QuRegExmm Homepage"));
 	info.AddDeveloper(wxT("Christopher Bess of Quantum Quinn"));
 			
 	// show the about info
